@@ -1,0 +1,8 @@
+-cp src
+-js bin/server.js
+-main lix.server.Server
+
+-lib tink_web
+-lib tink_sql
+-lib tink_semver
+-lib hxnodejs
