@@ -1,0 +1,21 @@
+sudo: required
+dist: trusty
+
+language: node_js
+node_js: 6
+
+env:
+  secure: "cvSQovV7FeNmGEUt8zxEsu/aaqgbQhlz4CN5yEAheSZTMGS09/iNZ3SslEglgD59rCkzbVXfxkGt+eVXDgqOi2+TfaGKauCfKXhnmvkgKnD2tVB2Y2E6JIotYy5hi3HAumcuxTAyvdembG5NHBJ9LLJUDZQ4VKV55hNJIA3OLMn+tVlz1g+HPx0NrFrGY4mrsN4lr6QfgEyWmK+JBXlhm5JFkN/KBG9doSN2H2n1opzSyH+wlboLtsZduTpukiR3JwBhqJMdypErmyKXvmC3CeXCh3hIKo2ow/qPIjxDRcu5gB2llmkabz4vDDlkpw9ofrTlc7KfsVWHIWECPL2m6RKbuJyQiormJVXsm580fOpIMe01fDkTLofvkbk7Miso9CpgVigVswGt5y9gdq+rR6x8C6aOx8nEGeS+1ZSrZQBO6DsSuMDT0RoDryr8IfGaOqdMWwd3t4/0Ge+E/mBgQyGaUji4bwF7vrKYGa6rq5Bsl0JUpmZ/JGZaue+KRIXuRbDiZMjPa6JSHn9hNSluzy/1cfZt74NB+mgGTFgQTR5/sG+o37l7dxiesdF5qVc0uGLwaaljdCLG+JET43df/sxBMh1SECegYfpn8LHlGKP/67stsMP4Uy4PqJtEVTgV/rdYdz4/VNJ33sibZ+TTksNhuIs+HDK41IOCy8ioSNM="
+
+branches:
+  only:
+    - master
+
+before_script:
+  - yarn
+  - export PATH=$PATH:$(yarn bin)
+  - lix download
+  
+script:
+  - haxe build-prod.hxml
+  - serverless deploy --stage production
