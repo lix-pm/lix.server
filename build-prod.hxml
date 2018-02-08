@@ -1,0 +1,6 @@
+common.hxml
+-js bin/lambda.js
+lix.server.Server
+
+-D aws_lambda
+-D environment=production

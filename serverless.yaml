@@ -1,0 +1,23 @@
+service: lix-api
+
+provider:
+  name: aws
+  stage: ${{opt:stage, 'development'}}
+  profile: lix
+  runtime: nodejs6.10
+  region: us-east-2
+  variableSyntax: '\${{([\s\S]+?)}}'
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource: "*"
+  environment:
+    DATABASE_URL: ${{env:DATABASE_URL}}
+
+functions:
+  index:
+    handler: bin/lambda.index
+    events:
+      - http: ANY {proxy+}
+      - http: ANY /

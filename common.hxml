@@ -1,0 +1,8 @@
+-cp src
+
+-lib asys
+-lib futurize
+-lib tink_web
+-lib tink_sql
+-lib tink_semver
+-lib hxnodejs

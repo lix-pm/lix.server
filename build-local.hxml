@@ -1,0 +1,5 @@
+common.hxml
+-js bin/server.js
+-main lix.server.Server
+
+-D environment=local
