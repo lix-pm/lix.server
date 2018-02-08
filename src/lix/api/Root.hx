@@ -2,5 +2,5 @@ package lix.api;
 
 interface Root {
 	@:sub
-	function projects():ProjectsApi;
+	function owners():OwnersApi;
 }

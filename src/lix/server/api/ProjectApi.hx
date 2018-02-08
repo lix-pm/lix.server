@@ -1,21 +1,20 @@
 package lix.server.api;
 
-class ProjectApi implements lix.api.ProjectApi {
+class ProjectApi extends BaseApi implements lix.api.ProjectApi {
 
+  var owner:OwnerName;
+  var name:ProjectName;
   var path:String;
   
-  public function new(name:String) {
-    this.path = '/libraries/$name';
-  }
-
-  public function submit(version:String, archive:tink.io.Source.RealSource):Promise<{}> {
-    return new Error('Not Implemented');
+  public function new(owner, name) {
+    this.owner = owner;
+    this.name = name;
+    this.path = '/libraries/$owner/$name';
   }
 
   public function info():Promise<ProjectInfo> 
     return new Error('Not Implemented');
 
-  public function version(version:Version):VersionApi 
-    return new VersionApi(version);
-
+  public function versions():VersionsApi 
+    return new VersionsApi(owner, name);
 }

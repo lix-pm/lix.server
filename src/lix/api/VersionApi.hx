@@ -1,7 +1,10 @@
 package lix.api;
 
 interface VersionApi {
+  @:post('/')
+  @:params(archive = body)
+  function submit(archive:tink.io.Source.RealSource):Promise<{}>;
 	
-//   @:get
-//   function archive():tink.io.Source.RealSource;
+  @:get('/')
+  function download():Promise<OutgoingResponse>;
 }
