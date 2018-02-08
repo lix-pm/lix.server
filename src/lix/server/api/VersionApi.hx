@@ -13,15 +13,13 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
     this.path = '/libraries/$owner/$project/$version';
   }
 
-  public function submit(archive:tink.io.Source.RealSource):Promise<{}> {
-    return archive.pipeTo(fs.write('$path/archive.zip'))
-      .next(function(o) return switch o {
-        case AllWritten: Promise.lift({});
-        case SourceFailed(e) | SinkFailed(e, _): e;
-        case SinkEnded(_): new Error('Sink ended unexpectedly');
-      });
-  }
+  public function url(?upload:Bool):Promise<{url:String}>
+    return (upload ? fs.getUploadUrl : fs.getDownloadUrl)('$path/archive.zip')
+      .next(function(url) return {url: url});
   
-  public function download():Promise<OutgoingResponse>
-    return new Error('Not Implemented');
+  public function download():Promise<tink.Url>
+    return url(false).next(function(o) return tink.Url.parse(o.url));
+  
+  public function upload():Promise<tink.Url>
+    return url(true).next(function(o) return tink.Url.parse(o.url));
 }

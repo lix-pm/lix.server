@@ -1,0 +1,5 @@
+# @install: lix --silent download "https://github.com/kevinresol/futurize/archive/c1f966008ee80873ea67e881dd13eb0bf5c7f6bf.tar.gz" into futurize/1.0.1/github/c1f966008ee80873ea67e881dd13eb0bf5c7f6bf
+-D futurize=1.0.1
+-cp ${HAXESHIM_LIBCACHE}/futurize/1.0.1/github/c1f966008ee80873ea67e881dd13eb0bf5c7f6bf/src
+
+-lib tink_macro

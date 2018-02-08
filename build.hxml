@@ -3,7 +3,10 @@
 -main lix.server.Server
 
 -lib asys
+-lib futurize
 -lib tink_web
 -lib tink_sql
 -lib tink_semver
 -lib hxnodejs
+
+-D environment=production

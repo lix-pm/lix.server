@@ -1,10 +1,16 @@
 package lix.api;
 
 interface VersionApi {
-  @:post('/')
-  @:params(archive = body)
-  function submit(archive:tink.io.Source.RealSource):Promise<{}>;
+  // @:post('/')
+  // @:params(archive = body)
+  // function submit(archive:tink.io.Source.RealSource):Promise<tink.Url>;
 	
+  @:get
+  public function url(?upload:Bool):Promise<{url:String}>;
+  
   @:get('/')
-  function download():Promise<OutgoingResponse>;
+  public function download():Promise<tink.Url>;
+  
+  @:post('/')
+  public function upload():Promise<tink.Url>;
 }
