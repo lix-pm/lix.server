@@ -30,10 +30,10 @@ class S3 implements lix.server.service.Fs {
     return @:futurize s3.deleteObject({Bucket: bucket, Key: path}, $cb1);
   
 	public function getDownloadUrl(path:String):Promise<String>
-    return @:futurize s3.getSignedUrl('getObject', {Bucket: bucket, Key: path}, $cb1);
+    return @:futurize s3.getSignedUrl('getObject', {Bucket: bucket, Key: path, Expires: 300}, $cb1);
   
 	public function getUploadUrl(path:String):Promise<String>
-    return @:futurize s3.getSignedUrl('putObject', {Bucket: bucket, Key: path}, $cb1);
+    return @:futurize s3.getSignedUrl('putObject', {Bucket: bucket, Key: path, Expires: 300}, $cb1);
   
 }
 
