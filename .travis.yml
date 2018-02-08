@@ -15,7 +15,6 @@ branches:
     - master
   
 before_script:
-  - yarn
   - export PATH=$PATH:$(yarn bin)
   - lix download
 
