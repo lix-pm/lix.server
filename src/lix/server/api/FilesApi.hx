@@ -17,7 +17,7 @@ class FilesApi extends BaseApi implements lix.api.FilesApi {
     
   public function download(path:String):Promise<OutgoingResponse> {
     return new OutgoingResponse(
-      new ResponseHeader(200, 'OK', []),
+      new ResponseHeader(200, 'OK', [new HeaderField(CONTENT_TYPE, 'application/zip')]),
       fs.read(path).idealize(function(e) {
         trace(e);
         return Source.EMPTY;
