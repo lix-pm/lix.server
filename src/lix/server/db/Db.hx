@@ -8,7 +8,7 @@ class Db extends tink.sql.Database {
 	static var inst:Db;
 	public static function get() {
 		if(inst == null) {
-			switch Sys.getEnv('CLEARDB_DATABASE_URL') {
+			switch Sys.getEnv('DATABASE_URL') {
 				case null:
 					var driver = new MySql({user: 'root', password: ''});
 					inst = new Db('lix', driver);
