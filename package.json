@@ -3,6 +3,7 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
+    "aws-sdk": "^2.191.0",
     "haxeshim": "^0.12.2",
     "lix.pm": "^0.14.0",
     "serverless": "^1.26.0"

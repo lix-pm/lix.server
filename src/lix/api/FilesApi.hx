@@ -1,7 +1,7 @@
 package lix.api;
 
 interface FilesApi {
-	@:post('/')
+	@:put('/')
   @:params(path in query)
   @:params(content = body)
 	function upload(path:String, content:tink.io.Source.RealSource):Promise<{}>;
