@@ -10,8 +10,8 @@ interface VersionApi {
   public function url(?upload:Bool):Promise<{url:String}>;
   
   @:get('/')
-  public function download():Promise<tink.Url>;
+  public function download():Promise<OutgoingResponse>;
   
-  @:post('/')
-  public function upload():Promise<tink.Url>;
+  @:put('/')
+  public function upload():Promise<OutgoingResponse>;
 }
