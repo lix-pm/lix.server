@@ -19,7 +19,7 @@ branches:
   
 before_install:
   - mysql -e 'CREATE DATABASE lix_tests;'
-  - mysql -e 'show databases;'
+  - echo $DATABASE_URL
   
 before_script:
   - export PATH=$PATH:$(yarn bin)
