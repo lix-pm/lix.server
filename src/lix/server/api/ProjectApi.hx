@@ -12,8 +12,23 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
     this.path = '/libraries/$owner/$name';
   }
 
-  public function info():Promise<ProjectInfo> 
-    return new Error('Not Implemented');
+  public function info():Promise<ProjectDescription> {
+    return db.Owner
+      .join(db.Project).on(Project.owner == Owner.id)
+      .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
+      .where(Owner.name == owner && Project.name == name)
+      .all()
+      .next(function(o) {
+        var project = o[0].Project;
+        return {
+          name: project.name,
+          description: project.description,
+          tags: [for(o in o) o.ProjectTag.tag],
+          deprecated: project.deprecated,
+          authors: [], // TODO
+        }
+      });
+  }
 
   public function versions():VersionsApi 
     return new VersionsApi(owner, name);

@@ -1,0 +1,11 @@
+common.hxml
+
+-cp tests
+-main RunTests
+-js bin/tests.js
+
+-lib tink_unittest
+
+-D tests
+
+-cmd node bin/tests.js

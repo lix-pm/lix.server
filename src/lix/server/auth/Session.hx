@@ -4,7 +4,6 @@ import lix.server.db.*;
 import lix.server.util.*;
 import tink.http.Request;
 
-using haxe.io.Path;
 using tink.CoreApi;
 
 class Session {

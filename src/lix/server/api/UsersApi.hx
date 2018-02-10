@@ -28,8 +28,8 @@ class UsersApi extends BaseApi implements lix.api.UsersApi {
           githubId: data.githubId,
         });
       })
-      .next(function(id) return {
-        id: id,
+      .next(function(uid) return {
+        id: uid,
         username: data.username,
         nickname: data.nickname,
         githubId: data.githubId,

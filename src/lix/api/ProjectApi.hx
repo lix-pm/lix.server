@@ -2,7 +2,7 @@ package lix.api;
 
 interface ProjectApi {
   @:get('/')
-  function info():Promise<ProjectInfo>;
+  function info():Promise<ProjectDescription>;
 
   @:sub('/versions')
   function versions():VersionsApi;

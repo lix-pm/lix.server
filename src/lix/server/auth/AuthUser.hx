@@ -29,11 +29,18 @@ class AuthUser {
         case Owner(owner) | Project(owner, _) if(owner == user.username):
           Role.Owner;
         case Owner(owner):
-          db.OwnerRole.where(OwnerRole.user == id && OwnerRole.owner == owner).first()
-            .next(function(o) return o.role);
+          db.Owner
+            .leftJoin(db.OwnerRole).on(OwnerRole.owner == Owner.id)
+            .where(Owner.name == owner )
+            .first()
+            .next(function(o) return o.OwnerRole.role);
         case Project(owner, project):
-          db.ProjectRole.where(ProjectRole.user == id && ProjectRole.owner == owner && ProjectRole.project == project).first()
-            .next(function(o) return o.role);
+          db.Owner
+            .leftJoin(db.Project).on(Project.owner == Owner.id)
+            .leftJoin(db.ProjectRole).on(ProjectRole.project == Project.id)
+            .where(Owner.name == owner && Project.name == project)
+            .first()
+            .next(function(o) return o.ProjectRole.role);
       }
     });
   }
