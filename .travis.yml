@@ -19,16 +19,17 @@ branches:
   
 before_install:
   - mysql -e 'CREATE DATABASE lix_tests;'
-  - echo $DATABASE_URL
   
 before_script:
   - export PATH=$PATH:$(yarn bin)
   - lix download
+  - export DATABASE_URL_TMP=$DATABASE_URL && unset DATABASE_URL # temporarily rename so tests won't pick it up
 
 script:
   - haxe tests.hxml && node bin/tests.js
   
 after_success:
+  - export DATABASE_URL=$DATABASE_URL_TMP # put back in place
   - haxe build-prod.hxml
   - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile lix
   - serverless deploy --stage production
