@@ -19,6 +19,7 @@ before_script:
   - lix download
 
 script:
+  - haxe tests.hxml
   - haxe build-prod.hxml
   - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile lix
   - serverless deploy --stage production
