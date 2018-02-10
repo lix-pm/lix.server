@@ -2,7 +2,7 @@ package lix.server.db;
 
 import tink.sql.drivers.MySql;
 
-@:tables(Project, User, ProjectVersion, ProjectTag, ProjectContributor)
+@:tables(Project, User, ProjectVersion, ProjectTag, OwnerRole, ProjectRole)
 class Db extends tink.sql.Database {
 	
 	static var inst:Db;
