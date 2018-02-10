@@ -8,17 +8,17 @@ using haxe.io.Path;
 using tink.CoreApi;
 
 class Session {
-	var header:IncomingRequestHeader;
-	var db = Db.get();
+  var header:IncomingRequestHeader;
+  var db = Db.get();
   
-	public function new(header)
-		this.header = header;
-		
-	public function getUser():Promise<Option<AuthUser>> {
-		return switch header.getAuth() {
-			case Success(Bearer(token)):
-				new Error(BadRequest, 'Bearer authorization is not supported');
-			case Success(Basic(username, password)):
+  public function new(header)
+    this.header = header;
+    
+  public function getUser():Promise<Option<AuthUser>> {
+    return switch header.getAuth() {
+      case Success(Bearer(token)):
+        new Error(BadRequest, 'Bearer authorization is not supported');
+      case Success(Basic(username, password)):
         db.User.where(User.username == username).first()
           .next(function(user) {
             return
@@ -32,11 +32,11 @@ class Session {
                       else new Error(Unauthorized, 'Incorrect password');
                   });
           });
-			case Success(Others(scheme, params)): 
+      case Success(Others(scheme, params)): 
         new Error(BadRequest, 'Unsupported authorization header "$scheme $params"');
-			case Failure(_):
+      case Failure(_):
         new Error(BadRequest, 'Authorization header is not present');
-		}
-	}
-	
+    }
+  }
+  
 }
