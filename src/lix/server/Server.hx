@@ -35,7 +35,11 @@ class Server {
     container.run(function (req:IncomingRequest) {
       return r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
     });
-
+    
+    // init / update db (TODO: this shouldn't be here)
+    var db = Db.get();
+    db.init().flatMap(function(_) return db.updateSchema()).eager();
+    
     trace('running');
   }
 }
