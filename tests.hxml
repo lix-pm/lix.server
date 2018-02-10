@@ -7,5 +7,3 @@ common.hxml
 -lib tink_unittest
 
 -D tests
-
--cmd node bin/tests.js
