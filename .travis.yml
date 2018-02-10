@@ -4,6 +4,9 @@ dist: trusty
 language: node_js
 node_js: 6
 
+services:
+  - mysql
+
 env:
   global:
   - secure: Lh8qR/5hTThKoslDk9G7VO7sWRVREuslEM3qVvex4lEM0Jorr0zTy5OkdL8cyiUmKxLiJkbsOIxU/nTYDVjyH0rDb1Q2bl9MsU/nPtP9FQQeNMYy5xgJFML/NfRKtKMMDV3I1b6ts512Cz9vhN4BMwkl1I0FJgZVAf5t89pS4T/kcrGzUFdvR1tWjiJNkoDll4qcmQH7Jj6+6eU6zHxyYwqrVqG1cn46YDOYn+i6zKPpJiP6GVOMWYi8BufrPMLQ47pT/eft1VZhTwjv9dFErrfAaC9GpCiQOAw5z3p6qLL16GjkOGJo+1HewrqOZ0S8OUyVSgl5pYs0c6/ddps7ywpWHRChoQRtJooh2Nqx0tZz9z+I3nUgPMc2AX8jb7bh/0jUPWTQMO7kYnlYEJskBkbh0nxmQ6+R5bFi3Hy9m1xiPz8OJEVxfXqVsE5hgdGrLMTPDSwYCjJ+xirXT8zIV3/oriuiHcuvUH3nYVH5/wnVTdiTAyr4GpIPpOb1jZBhmrJ9DgyAb4wVHY1nHtycWTppS0kh7v9uC4kqOvtVgZaEDKjyq9YaFUwDwxnIHV1iBMaqfXnW2wM9OZoqsbCkGQDwfpkAcy+i+Bx1hu2+t/KuCE0YGEjGG+OSBn3Ilp0tL5WhjbW7HjD5pmTFPQWPOnwBp+jLkKgsSkKaPjOs3PM= # DATABASE_URL
@@ -14,6 +17,8 @@ branches:
   only:
     - master
   
+before_install:
+  - mysql -e 'CREATE DATABASE lix_tests;'
 before_script:
   - export PATH=$PATH:$(yarn bin)
   - lix download
