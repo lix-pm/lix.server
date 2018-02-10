@@ -1,13 +1,15 @@
 package lix.server;
 
 import lix.server.api.*;
+import lix.server.auth.Session;
 import lix.server.db.*;
 import tink.semver.*;
 import tink.http.Request;
 import tink.http.Response;
 import tink.http.Container;
 import tink.http.containers.*;
-import tink.web.routing.*;
+import tink.web.routing.Router;
+import tink.web.routing.Context;
 
 class Server {
   
@@ -29,9 +31,9 @@ class Server {
   #end
   
   static function run(container:Container) {
-    var r = new Router<lix.api.Root>(new Root());
+    var r = new Router<Session, lix.api.Root>(new Root());
     container.run(function (req:IncomingRequest) {
-      return r.route(Context.ofRequest(req)).recover(OutgoingResponse.reportError);
+      return r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
     });
 
     trace('running');
