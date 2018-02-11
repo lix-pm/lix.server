@@ -6,6 +6,8 @@ interface Root {
 	function owners():OwnersApi;
 	@:sub
 	function users():UsersApi;
+	@:sub
+	function oauth():OAuthApi;
   
   #if (environment == "local")
   @:sub
