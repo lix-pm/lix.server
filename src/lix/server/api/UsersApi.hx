@@ -36,6 +36,7 @@ class UsersApi extends BaseApi implements lix.api.UsersApi {
         },
     })
       .next(function(o) {
+        // TODO: need transaction in case owner name is taken
         return db.User.insertOne({
           id: null,
           username: data.username,
@@ -45,6 +46,12 @@ class UsersApi extends BaseApi implements lix.api.UsersApi {
           passwordIterations: o.password.iterations,
           githubId: o.github,
         })
+          .next(function(uid) {
+            return db.Owner.insertOne({
+              id: null,
+              name: data.username,
+            }).swap(uid);
+          })
           .next(function(uid) return {
             id: uid,
             username: data.username,

@@ -1,7 +1,10 @@
 package lix.server.auth;
 
-import lix.server.db.*;
-import lix.api.types.*;
+import lix.server.db.Db;
+import lix.server.db.User;
+import lix.api.types.OwnerName;
+import lix.api.types.ProjectName;
+import lix.api.types.Role;
 import tink.sql.Types;
 
 using tink.CoreApi;

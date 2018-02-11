@@ -22,16 +22,6 @@ class OAuthApi extends BaseApi implements lix.api.OAuthApi {
     }).all()
       .next(function(req) return tink.Json.parse((req.body.toString():GithubToken)))
       .next(function(token) return redirect(action, 'github_token=${token.access_token}'));
-      // .next(function(token) {
-      //   return fetch('https://api.github.com/user', {
-      //     headers: [
-      //       new HeaderField('user-agent', 'Lix'),
-      //       new HeaderField(AUTHORIZATION, 'token ${token.access_token}'),
-      //       new HeaderField(ACCEPT, 'application/json'),
-      //     ],
-      //   }).all();
-      // })
-      // .next(function(req) return tink.Json.parse((req.body:GithubProfile)));
   }
   
   static function redirect(action:OAuthAction, query:String) {
