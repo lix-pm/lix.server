@@ -4,6 +4,7 @@ using tink.CoreApi;
 using tink.io.Source;
 using tink.io.Sink;
 using StringTools;
+using haxe.io.Path;
 
 @:build(futurize.Futurize.build())
 class S3 implements lix.server.service.Fs {
@@ -21,6 +22,12 @@ class S3 implements lix.server.service.Fs {
     s3 = new _S3();
   }
   
+  public function list(path:String):Promise<Array<String>> {
+    var prefix = sanitize(path).addTrailingSlash();
+    return @:futurize s3.listObjects({Bucket: bucket, Prefix: prefix}, $cb1)
+      .next(function(o):Array<String> return [for(obj in o.data.Contents) obj.Key.substr(prefix.length)]);
+  }
+  
   public function exists(path:String):Promise<Bool>
     return @:futurize s3.headObject({Bucket: bucket, Key: sanitize(path)}, $cb1)
       .next(function(_) return true)
@@ -32,8 +39,10 @@ class S3 implements lix.server.service.Fs {
   public function write(path:String):RealSink
     return new Error('not implemented');
   
-  public function delete(path:String):Promise<Noise>
+  public function delete(path:String):Promise<Noise> {
+    // TODO: delete folder
     return @:futurize s3.deleteObject({Bucket: bucket, Key: sanitize(path)}, $cb1);
+  }
   
   public function getDownloadUrl(path:String):Promise<String>
     return @:futurize s3.getSignedUrl('getObject', {Bucket: bucket, Key: sanitize(path), Expires: 300}, $cb1);
@@ -52,6 +61,7 @@ class S3 implements lix.server.service.Fs {
 extern class _S3 {
   function new(?options:{});
   function getSignedUrl(op:String, params:{}, cb:js.Error->String->Void):Void;
+  function listObjects(params:{}, cb:js.Error->{data:{Contents:Array<{Key:String}>}}->Void):Void;
   function headObject(params:{}, cb:js.Error->Dynamic->Void):Void;
   function deleteObject(params:{}, cb:js.Error->Dynamic->Void):Void;
 }

@@ -8,6 +8,7 @@ class RunTests {
     Runner.run(TestBatch.make([
       new UserTest(),
       new ProjectTest(),
+      new VersionTest(),
     ])).handle(Runner.exit);
   }
 }

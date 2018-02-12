@@ -1,7 +1,6 @@
 package lix.server.api;
 
 class OwnersApi extends BaseApi implements lix.api.OwnersApi {
-  public function new() {}
   
   public function create(data:{name:OwnerName, admin:Int}) {
     // TODO: transaction

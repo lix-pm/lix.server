@@ -5,7 +5,6 @@ import tink.core.ext.*;
 import tink.http.Fetch.fetch;
 
 class UsersApi extends BaseApi implements lix.api.UsersApi {
-  public function new() {}
   
   public function create(data:{username:String, ?nickname:String, ?password:String, ?github_token:String}) {
     return Promises.multi({

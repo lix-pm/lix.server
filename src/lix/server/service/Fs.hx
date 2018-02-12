@@ -5,6 +5,7 @@ using tink.io.Sink;
 using tink.io.Source;
 
 interface Fs {
+  function list(path:String):Promise<Array<String>>;
   function exists(path:String):Promise<Bool>;
   function read(path:String):RealSource;
   function write(path:String):RealSink;

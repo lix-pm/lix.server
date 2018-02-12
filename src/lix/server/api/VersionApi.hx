@@ -4,17 +4,17 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
   var owner:OwnerName;
   var project:ProjectName;
   var version:String;
-  var path:String;
   
   public function new(owner, project, version) {
+    super();
     this.owner = owner;
     this.project = project;
     this.version = version;
-    this.path = '/libraries/$owner/$project/$version';
   }
 
   public function url(?upload:Bool):Promise<{url:String}> {
-    var archive = '$path/archive.zip';
+    var folder = path(owner, project, version);
+    var archive = '$folder/archive.zip';
     return fs.exists(archive)
       .next(function(exists) {
         return

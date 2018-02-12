@@ -9,7 +9,10 @@ class BaseTest {
   
   @:before
   public function init() {
-    return db.destroy().flatMap(function(_) return db.init());
+    return Promise.inParallel([
+      @:privateAccess new BaseApi().fs.delete('/'),
+      db.destroy().flatMap(function(_) return db.init()),
+    ]);
   }
   
   function async<T>(promise:Void->Promise<T>, ?assert:T->Void) {

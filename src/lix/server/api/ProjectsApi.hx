@@ -6,8 +6,10 @@ import tink.sql.Expr;
 class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
   public var scope(default, null):Scope;
   
-  public function new(scope)
+  public function new(scope) {
+    super();
     this.scope = scope;
+  }
     
   public function create(data:{name:String, ?url:String, ?description:String, ?tags:Array<String>}) {
     return switch scope {

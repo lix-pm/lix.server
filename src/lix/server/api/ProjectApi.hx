@@ -4,12 +4,11 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
 
   var owner:OwnerName;
   var name:ProjectName;
-  var path:String;
   
   public function new(owner, name) {
+    super();
     this.owner = owner;
     this.name = name;
-    this.path = '/libraries/$owner/$name';
   }
 
   public function info():Promise<ProjectDescription> {

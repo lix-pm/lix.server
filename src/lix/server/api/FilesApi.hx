@@ -4,8 +4,6 @@ using tink.io.Source;
 
 class FilesApi extends BaseApi implements lix.api.FilesApi {
   
-  public function new() {} 
-  
   public function upload(path:String, content:tink.io.Source.RealSource):Promise<{}> {
     return content.pipeTo(fs.write(path))
       .next(function(o) return switch o {

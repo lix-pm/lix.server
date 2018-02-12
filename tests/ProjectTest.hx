@@ -39,10 +39,12 @@ class ProjectTest extends BaseTest {
         project => asserts.assert(compare(tags, project.tags))
       ),
       async(
+        // check Project table
         [] => db.Project.where(Project.name == name).count(), 
         count => asserts.assert(count == 1)
       ),
       async(
+        // check ProjectTag table
         [] => db.Project
           .leftJoin(db.ProjectTag).on(Project.id == ProjectTag.project)
           .where(Project.name == name).count(), 
@@ -62,6 +64,7 @@ class ProjectTest extends BaseTest {
         [] => UserTest.createUser({username: username})
       ),
       asyncError(
+        // 404 owner not found
         [] => createProject(owner, {name: name}), 
         e => asserts.assert(e.code == 404)
       ),

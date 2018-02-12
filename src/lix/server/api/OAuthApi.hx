@@ -9,8 +9,6 @@ class OAuthApi extends BaseApi implements lix.api.OAuthApi {
   static var GITHUB_APP_ID = 'bef02a0cfa55650c58af';
   static var GITHUB_APP_SECRET = Sys.getEnv('GITHUB_APP_SECRET');
   
-  public function new() {}
-  
   public function githubAuthorize(action:OAuthAction):tink.Url {
     return 'https://github.com/login/oauth/authorize?client_id=$GITHUB_APP_ID&state=${randomString()}&redirect_uri=http://localhost:1234/oauth/github/callback?action=$action';
   }
