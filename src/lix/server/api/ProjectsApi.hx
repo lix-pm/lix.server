@@ -1,9 +1,10 @@
 package lix.server.api;
 
+import lix.api.ProjectsApi;
 import tink.sql.Expr;
 
 class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
-  var scope:Scope;
+  public var scope(default, null):Scope;
   
   public function new(scope)
     this.scope = scope;
@@ -76,9 +77,4 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
         new Error(BadRequest, 'Cannot access project "$name" in global scope');
     }
   }
-}
-
-private enum Scope {
-  Global;
-  Owner(owner:OwnerName);
 }

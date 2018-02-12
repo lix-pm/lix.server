@@ -18,4 +18,11 @@ class BaseTest {
         return Noise;
       });
   }
+  
+  function asyncError<T>(promise:Void->Promise<T>, ?assert:Error->Void) {
+    return Promise.lazy(promise).map(function(o) return switch o {
+        case Success(_): Failure(new Error('Expected Failure but got Success'));
+        case Failure(e): assert(e); Success(Noise);
+      });
+  }
 }

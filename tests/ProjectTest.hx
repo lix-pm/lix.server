@@ -52,6 +52,23 @@ class ProjectTest extends BaseTest {
     return asserts;
   }
   
+  public function createAsNonExistentOwner() {
+    var username = 'my_username';
+    var name = 'project-name';
+    var owner = 'whatever';
+    
+    Promise.inSequence([
+      async(
+        [] => UserTest.createUser({username: username})
+      ),
+      asyncError(
+        [] => createProject(owner, {name: name}), 
+        e => asserts.assert(e.code == 404)
+      ),
+    ]).handle(asserts.handle);
+    return asserts;
+  }
+  
   public static function createProject(owner:String, data = {name: 'project-name', url:(null:String), description:(null:String), tags:(null:Array<String>)}) {
     return new ProjectsApi(Owner(owner)).create(data);
   }
