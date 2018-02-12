@@ -26,8 +26,8 @@ before_script:
 
 script:
   - haxe tests.hxml && node bin/tests.js
+  - haxe build-prod.hxml
   
 after_success:
-  - haxe build-prod.hxml
   - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile lix
   - serverless deploy --stage production
