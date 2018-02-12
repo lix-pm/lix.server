@@ -26,19 +26,19 @@ class S3 implements lix.server.service.Fs {
       .next(function(_) return true)
       .recover(function(_) return false);
   
-	public function read(path:String):RealSource
+  public function read(path:String):RealSource
     return new Error('not implemented');
   
-	public function write(path:String):RealSink
+  public function write(path:String):RealSink
     return new Error('not implemented');
   
-	public function delete(path:String):Promise<Noise>
+  public function delete(path:String):Promise<Noise>
     return @:futurize s3.deleteObject({Bucket: bucket, Key: sanitize(path)}, $cb1);
   
-	public function getDownloadUrl(path:String):Promise<String>
+  public function getDownloadUrl(path:String):Promise<String>
     return @:futurize s3.getSignedUrl('getObject', {Bucket: bucket, Key: sanitize(path), Expires: 300}, $cb1);
   
-	public function getUploadUrl(path:String):Promise<String>
+  public function getUploadUrl(path:String):Promise<String>
     return @:futurize s3.getSignedUrl('putObject', {Bucket: bucket, Key: sanitize(path), Expires: 300}, $cb1);
   
   static function sanitize(path:String) {

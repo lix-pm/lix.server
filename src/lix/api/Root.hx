@@ -2,12 +2,12 @@ package lix.api;
 
 @:tink
 interface Root {
-	@:sub
-	function owners():OwnersApi;
-	@:sub
-	function users():UsersApi;
-	@:sub
-	function oauth():OAuthApi;
+  @:sub
+  function owners():OwnersApi;
+  @:sub
+  function users():UsersApi;
+  @:sub
+  function oauth():OAuthApi;
   
   #if (environment == "local")
   @:sub

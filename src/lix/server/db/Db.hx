@@ -6,22 +6,22 @@ using tink.CoreApi;
 
 @:tables(Project, User, ProjectVersion, ProjectTag, ProjectRole, Owner, OwnerRole)
 class Db extends tink.sql.Database {
-	
-	static var inst:Db;
-	public static function get():DbWrapper {
-		if(inst == null) {
-			switch Sys.getEnv('DATABASE_URL') {
-				case null:
-					var driver = new MySql({user: 'root', password: '', host: Sys.getEnv('CI') == null ? null : '127.0.0.1'});
-					inst = new Db(#if tests 'lix_tests' #else 'lix' #end, driver);
-				case v:
-					var url = tink.Url.parse(v);
-					var driver = new MySql({user: url.auth.user, password: url.auth.password, host: url.host.name, port: url.host.port});
-					inst = new Db(url.path.toString().substr(1), driver);
-			}
-		}
-		return inst;
-	}
+  
+  static var inst:Db;
+  public static function get():DbWrapper {
+    if(inst == null) {
+      switch Sys.getEnv('DATABASE_URL') {
+        case null:
+          var driver = new MySql({user: 'root', password: '', host: Sys.getEnv('CI') == null ? null : '127.0.0.1'});
+          inst = new Db(#if tests 'lix_tests' #else 'lix' #end, driver);
+        case v:
+          var url = tink.Url.parse(v);
+          var driver = new MySql({user: url.auth.user, password: url.auth.password, host: url.host.name, port: url.host.port});
+          inst = new Db(url.path.toString().substr(1), driver);
+      }
+    }
+    return inst;
+  }
 }
 
 @:forward
