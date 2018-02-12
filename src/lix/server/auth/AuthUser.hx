@@ -26,7 +26,7 @@ class AuthUser {
     return data;
   }
   
-  public function role(target:Target):Promise<Role> {
+  public function role(target:Target):RolePromise {
     return data.next(function(user) {
       return switch target {
         case Owner(owner) | Project(owner, _) if(owner == user.username):
@@ -52,4 +52,10 @@ class AuthUser {
 private enum Target {
   Owner(owner:OwnerName);
   Project(owner:OwnerName, project:ProjectName);
+}
+
+@:forward
+private abstract RolePromise(Promise<Role>) from Promise<Role> to Promise<Role> {
+  public function is(role:Role)
+    return this.next(function(r) return r == role);
 }

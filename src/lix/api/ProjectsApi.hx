@@ -7,7 +7,7 @@ interface ProjectsApi {
   @:params(data = body)
   @:restrict(switch this.scope {
     case Global: new tink.core.Error(BadRequest, 'Cannot create project in global scope');
-    case Owner(name): user.role(Owner(name)).next(function(role) return role == Admin);
+    case Owner(name): user.role(Owner(name)).is(Admin);
   })
   function create(data:{name:String, ?url:String, ?description:String, ?tags:Array<String>}):Promise<ProjectDescription>;
   
