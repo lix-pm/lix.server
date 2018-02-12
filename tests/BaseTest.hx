@@ -10,7 +10,7 @@ class BaseTest {
   @:before
   public function init() {
     return Promise.inParallel([
-      @:privateAccess new BaseApi().fs.delete('/'),
+      @:privateAccess new BaseApi().fs.delete('/').recover(function(_) return Noise),
       db.destroy().flatMap(function(_) return db.init()),
     ]);
   }
