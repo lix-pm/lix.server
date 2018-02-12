@@ -7,6 +7,8 @@ interface Root {
   @:sub
   function users():UsersApi;
   @:sub
+  function projects():ProjectsApi;
+  @:sub
   function oauth():OAuthApi;
   
   #if (environment == "local")

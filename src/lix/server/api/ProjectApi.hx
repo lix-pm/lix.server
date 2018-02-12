@@ -14,7 +14,7 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
 
   public function info():Promise<ProjectDescription> {
     return db.Owner
-      .join(db.Project).on(Project.owner == Owner.id)
+      .leftJoin(db.Project).on(Project.owner == Owner.id)
       .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
       .where(Owner.name == owner && Project.name == name)
       .all()
@@ -23,7 +23,7 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
         return {
           name: project.name,
           description: project.description,
-          tags: [for(o in o) o.ProjectTag.tag],
+          tags: [for(o in o) if(o.ProjectTag != null) o.ProjectTag.tag],
           deprecated: project.deprecated,
           authors: [], // TODO
         }

@@ -11,5 +11,5 @@ interface ProjectsApi {
   function list(?filter:ProjectFilter):Promise<Array<ProjectDescription>>;
   
   @:sub('/$name')
-  function byName(name:ProjectName):ProjectApi;
+  function byName(name:ProjectName):Promise<ProjectApi>;
 }

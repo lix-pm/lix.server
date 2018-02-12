@@ -9,5 +9,5 @@ class OwnerApi extends BaseApi implements lix.api.OwnerApi {
   }
   
   public function projects()
-    return new ProjectsApi(name);
+    return new ProjectsApi(Owner(name));
 }
