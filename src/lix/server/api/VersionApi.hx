@@ -1,8 +1,8 @@
 package lix.server.api;
 
 class VersionApi extends BaseApi implements lix.api.VersionApi {
-  var owner:OwnerName;
-  var project:ProjectName;
+  public var owner(default, null):OwnerName;
+  public var project(default, null):ProjectName;
   var version:String;
   
   public function new(owner, project, version) {

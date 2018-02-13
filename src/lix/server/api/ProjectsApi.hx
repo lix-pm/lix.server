@@ -44,11 +44,18 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
 
   public function list(?filter:ProjectFilter):Promise<Array<ProjectDescription>> {
     return db.Project
+      .leftJoin(db.Owner).on(Project.owner == Owner.id)
       .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
       .where({
         var cond = EValue(true, VBool);
-        if(filter.tags != null && filter.tags.length > 0) cond = cond && ProjectTag.tag.inArray(filter.tags);
-        if(filter.textSearch != null) cond = cond && Project.name.like('%${filter.textSearch}%');
+        if(filter != null) {
+          if(filter.tags != null && filter.tags.length > 0) cond = cond && ProjectTag.tag.inArray(filter.tags);
+          if(filter.textSearch != null) cond = cond && Project.name.like('%${filter.textSearch}%');
+          switch scope {
+            case Scope.Owner(owner): cond = cond && Owner.name == owner;
+            case Global: // do nothing
+          }
+        }
         cond;
       })
       .all()
@@ -65,7 +72,8 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
               authors: [], // TODO
             }
           }
-          ret[project.id].tags.push(o.ProjectTag.tag);
+          if(o.ProjectTag != null)
+            ret[project.id].tags.push(o.ProjectTag.tag);
         }
         return [for(project in ret) project];
       });

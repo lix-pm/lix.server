@@ -26,24 +26,34 @@ class AuthUser {
     return data;
   }
   
-  public function role(target:Target):RolePromise {
+  public function hasRole(target:Target, role:Role):Promise<Bool> {
+    function check(actual:Role):Promise<Bool> {
+      var roles:Array<Role> = switch role {
+        case Publisher: [Owner, Admin, Publisher];
+        case Admin: [Owner, Admin];
+        case Owner: [Owner];
+      }
+      return roles.indexOf(actual) != -1;
+    }
+    
     return data.next(function(user) {
       return switch target {
         case Owner(owner) | Project(owner, _) if(owner == user.username):
-          Role.Owner;
+          true; // has all roles
         case Owner(owner):
           db.Owner
             .leftJoin(db.OwnerRole).on(OwnerRole.owner == Owner.id)
             .where(Owner.name == owner )
             .first()
-            .next(function(o) return o.OwnerRole.role);
+            .next(function(o) return check(o.OwnerRole.role));
         case Project(owner, project):
           db.Owner
             .leftJoin(db.Project).on(Project.owner == Owner.id)
             .leftJoin(db.ProjectRole).on(ProjectRole.project == Project.id)
             .where(Owner.name == owner && Project.name == project)
             .first()
-            .next(function(o) return o.ProjectRole.role);
+            .next(function(o) return check(o.ProjectRole.role))
+            .next(function(has) return has ? true : hasRole(Owner(owner), role));
       }
     });
   }
@@ -52,10 +62,4 @@ class AuthUser {
 private enum Target {
   Owner(owner:OwnerName);
   Project(owner:OwnerName, project:ProjectName);
-}
-
-@:forward
-private abstract RolePromise(Promise<Role>) from Promise<Role> to Promise<Role> {
-  public function is(role:Role)
-    return this.next(function(r) return r == role);
 }

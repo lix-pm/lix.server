@@ -21,6 +21,16 @@ class ProjectTest extends BaseTest {
         [] => db.Project.where(Project.name == name).count(),
         count => asserts.assert(count == 1)
       ),
+      async(
+        // list all projects
+        [] => new ProjectsApi(Owner(username)).list(),
+        projects => asserts.assert(projects.length == 1)
+      ),
+      async(
+        // filter with tag
+        [] => new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        projects => asserts.assert(projects.length == 0)
+      ),
     ]).handle(asserts.handle);
     return asserts;
   }
@@ -49,6 +59,21 @@ class ProjectTest extends BaseTest {
           .leftJoin(db.ProjectTag).on(Project.id == ProjectTag.project)
           .where(Project.name == name).count(), 
         count => asserts.assert(count == 2)
+      ),
+      async(
+        // list all projects
+        [] => new ProjectsApi(Owner(username)).list(),
+        projects => asserts.assert(projects.length == 1)
+      ),
+      async(
+        // filter with tag
+        [] => new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        projects => asserts.assert(projects.length == 0)
+      ),
+      async(
+        // filter with tag
+        [] => new ProjectsApi(Owner(username)).list({tags: ['tag1']}),
+        projects => asserts.assert(projects.length == 1)
       ),
     ]).handle(asserts.handle);
     return asserts;
