@@ -7,7 +7,7 @@ interface Root {
   @:sub
   function users():UsersApi;
   @:sub
-  function projects():ProjectsApi;
+  function projects():ProjectSearchApi;
   @:sub
   function oauth():OAuthApi;
   
