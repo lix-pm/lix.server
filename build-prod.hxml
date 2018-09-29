@@ -3,4 +3,4 @@ common.hxml
 lix.server.Server
 
 -D aws_lambda
--D environment=production
+-D environment=prod

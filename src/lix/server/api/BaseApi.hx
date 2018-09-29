@@ -9,7 +9,7 @@ class BaseApi {
   
   public function new() {}
   
-  var fs:Fs = #if (environment == "production") new S3('lix-production') #else new Local('./storage') #end ;
+  var fs:Fs = #if (environment == "prod") new S3('lix-production') #else new Local('./storage') #end ;
   var db = Db.get();
   
   function path(?owner:OwnerName, ?project:ProjectName, ?version:String) {
