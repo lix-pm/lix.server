@@ -6,5 +6,5 @@ typedef Project = {
   var owner(default, never):Id<Owner>;
   @:optional var description(default, never):VarChar<1024>;
   @:optional var url(default, never):VarChar<1024>;
-  var deprecated(default, never):Boolean;
+  var deprecated(default, never):Bool;
 }

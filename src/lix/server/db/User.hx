@@ -6,6 +6,6 @@ typedef User = {
   @:optional var nickname(default, never):VarChar<255>;
   @:optional var passwordHash(default, never):VarChar<1024>; // should be Char<1024>
   @:optional var passwordSalt(default, never):VarChar<40>; // should be Char<40>
-  @:optional var passwordIterations(default, never):Integer<10>;
-  @:unique @:optional var githubId(default, never):Integer<15>;
+  @:optional var passwordIterations(default, never):Int;
+  @:unique @:optional var githubId(default, never):Int;
 }

@@ -14,17 +14,17 @@ class VersionTest extends BaseTest {
     
     Promise.inSequence([
       async(
-        [] => UserTest.createUser({username: username})
+        () -> UserTest.createUser({username: username})
       ),
       async(
-        [] => ProjectTest.createProject(username, {name: project})
+        () -> ProjectTest.createProject(username, {name: project})
       ),
       async(
-        [] => createVersion(username, project, version)
+        () -> createVersion(username, project, version)
       ),
       async(
         // make sure the file exists in fs
-        [] => {
+        () -> {
           var api = new BaseApi();
           @:privateAccess api.fs.list(api.path(username, project, version));
         },
@@ -35,7 +35,7 @@ class VersionTest extends BaseTest {
       ),
       async(
         // check API response
-        [] => new VersionsApi(username, project).list(),
+        () -> new VersionsApi(username, project).list(),
         versions => {
           asserts.assert(versions.length == 1);
           asserts.assert(versions[0] == version);

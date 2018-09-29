@@ -11,24 +11,24 @@ class ProjectTest extends BaseTest {
     
     Promise.inSequence([
       async(
-        [] => UserTest.createUser({username: username})
+        () -> UserTest.createUser({username: username})
       ),
       async(
-        [] => createProject(username, {name: name}),
+        () -> createProject(username, {name: name}),
         project => asserts.assert(project.name == name)
       ),
       async(
-        [] => db.Project.where(Project.name == name).count(),
+        () -> db.Project.where(Project.name == name).count(),
         count => asserts.assert(count == 1)
       ),
       async(
         // list all projects
-        [] => new ProjectsApi(Owner(username)).list(),
+        () -> new ProjectsApi(Owner(username)).list(),
         projects => asserts.assert(projects.length == 1)
       ),
       async(
         // filter with tag
-        [] => new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        () -> new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
     ]).handle(asserts.handle);
@@ -42,37 +42,37 @@ class ProjectTest extends BaseTest {
     
     Promise.inSequence([
       async(
-        [] => UserTest.createUser({username: username})
+        () -> UserTest.createUser({username: username})
       ),
       async(
-        [] => createProject(username, {name: name, tags: tags}), 
+        () -> createProject(username, {name: name, tags: tags}), 
         project => asserts.assert(compare(tags, project.tags))
       ),
       async(
         // check Project table
-        [] => db.Project.where(Project.name == name).count(), 
+        () -> db.Project.where(Project.name == name).count(), 
         count => asserts.assert(count == 1)
       ),
       async(
         // check ProjectTag table
-        [] => db.Project
+        () -> db.Project
           .leftJoin(db.ProjectTag).on(Project.id == ProjectTag.project)
           .where(Project.name == name).count(), 
         count => asserts.assert(count == 2)
       ),
       async(
         // list all projects
-        [] => new ProjectsApi(Owner(username)).list(),
+        () -> new ProjectsApi(Owner(username)).list(),
         projects => asserts.assert(projects.length == 1)
       ),
       async(
         // filter with tag
-        [] => new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        () -> new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
       async(
         // filter with tag
-        [] => new ProjectsApi(Owner(username)).list({tags: ['tag1']}),
+        () -> new ProjectsApi(Owner(username)).list({tags: ['tag1']}),
         projects => asserts.assert(projects.length == 1)
       ),
     ]).handle(asserts.handle);
@@ -86,11 +86,11 @@ class ProjectTest extends BaseTest {
     
     Promise.inSequence([
       async(
-        [] => UserTest.createUser({username: username})
+        () -> UserTest.createUser({username: username})
       ),
       asyncError(
         // 404 owner not found
-        [] => createProject(owner, {name: name}), 
+        () -> createProject(owner, {name: name}), 
         e => asserts.assert(e.code == 404)
       ),
     ]).handle(asserts.handle);
