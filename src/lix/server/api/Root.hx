@@ -1,6 +1,13 @@
 package lix.server.api;
 
-class Root extends BaseApi implements lix.api.Root {
+interface LocalRoot extends lix.api.Root {
+  #if (environment == "local")
+  @:sub
+  function files():FilesApi;
+  #end
+}
+
+class Root extends BaseApi implements LocalRoot {
   public function owners() return new OwnersApi();
   public function users() return new UsersApi();
   public function projects() return new ProjectsApi(Global);

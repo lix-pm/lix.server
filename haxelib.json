@@ -2,7 +2,7 @@
   "name": "lix.server",
   "license": "MIT",
   "tags": [],
-  "classPath": "src",
+  "classPath": "lib",
   "contributors": [
     "kevinresol",
     "back2dos"
@@ -11,8 +11,6 @@
   "version": "0.0.0",
   "dependencies": {
     "tink_semver": "",
-    "tink_http": "",
-    "tink_url": "",
-    "tink_io": ""
+    "tink_sql": ""
   }
 }
