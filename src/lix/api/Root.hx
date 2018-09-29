@@ -18,4 +18,7 @@ interface Root {
   
   @:get('/debug/db')
   function debugDb():Promise<String> return db.Owner.all().swap('Connected');
+  
+  @:get
+  function version():{hash:String, buildDate:String};
 }

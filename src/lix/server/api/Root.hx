@@ -9,4 +9,9 @@ class Root extends BaseApi implements lix.api.Root {
   #if (environment == "local")
   public function files() return new FilesApi();
   #end
+  
+  public function version() return {
+    buildDate: lix.server.util.Macro.getBuildDate(),
+    hash: lix.server.util.Macro.getGitSha(),
+  }
 }
