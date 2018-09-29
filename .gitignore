@@ -1,4 +1,6 @@
-bin
+bin/storage
+bin/*.js
+
 node_modules
 .serverless
 storage

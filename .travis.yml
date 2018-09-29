@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 
 language: node_js
-node_js: 6
+node_js: 8
 
 services:
   - mysql
@@ -20,8 +20,10 @@ branches:
 before_install:
   - mysql -e 'CREATE DATABASE lix_tests;'
   
+install:
+  - yarn global add lix serverless
+  
 before_script:
-  - export PATH=$PATH:$(yarn bin)
   - lix download
 
 script:
@@ -29,5 +31,6 @@ script:
   - haxe build-prod.hxml
   
 after_success:
+  - cd bin
   - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile lix
   - serverless deploy --stage production
