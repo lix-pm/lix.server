@@ -3,7 +3,7 @@ package lix.server;
 import lix.server.api.Root;
 import lix.server.auth.Session;
 import lix.server.db.*;
-import lix.server.util.*;
+import lix.util.Config.*;
 import tink.semver.*;
 import tink.http.Request;
 import tink.http.Response;
@@ -22,7 +22,7 @@ class Server {
     }
   #else
     static function main() {
-      run(new NodeContainer(Config.API_SERVER_PORT));
+      run(new NodeContainer(API_SERVER_PORT));
     }
   #end
   

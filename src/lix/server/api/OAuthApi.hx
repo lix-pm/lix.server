@@ -1,7 +1,7 @@
 package lix.server.api;
 
 import lix.api.OAuthApi;
-import lix.server.util.Config.*;
+import lix.util.Config.*;
 import tink.http.Fetch.fetch;
 
 class OAuthApi extends BaseApi implements lix.api.OAuthApi {
@@ -14,7 +14,7 @@ class OAuthApi extends BaseApi implements lix.api.OAuthApi {
         response_type: 'code',
         client_id: COGNITO_CLIENT_ID,
         state: state,
-        redirect_uri: '$API_SERVER_URL/oauth/callback',
+        redirect_uri: '$API_SERVER_URL/oauth2/callback',
       });
   }
   
@@ -30,7 +30,7 @@ class OAuthApi extends BaseApi implements lix.api.OAuthApi {
       body: tink.QueryString.build({
         grant_type: 'authorization_code',
         client_id: COGNITO_CLIENT_ID,
-        redirect_uri: '$API_SERVER_URL/oauth/callback',
+        redirect_uri: '$API_SERVER_URL/oauth2/callback',
         code: code,
       })
     }).all()

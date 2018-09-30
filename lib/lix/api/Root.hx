@@ -8,7 +8,7 @@ interface Root {
   @:sub
   function projects():ProjectsApi;
   @:sub
-  function oauth():OAuthApi;
+  function oauth2():OAuthApi;
   @:get
   function version():{hash:String, buildDate:String};
 }
