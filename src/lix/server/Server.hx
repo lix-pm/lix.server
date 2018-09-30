@@ -3,6 +3,7 @@ package lix.server;
 import lix.server.api.Root;
 import lix.server.auth.Session;
 import lix.server.db.*;
+import lix.server.util.*;
 import tink.semver.*;
 import tink.http.Request;
 import tink.http.Response;
@@ -21,12 +22,7 @@ class Server {
     }
   #else
     static function main() {
-      var port = switch Sys.getEnv('PORT') {
-        case null: 1234;
-        case v: Std.parseInt(v);
-      }
-      
-      run(new NodeContainer(port));
+      run(new NodeContainer(Config.API_SERVER_PORT));
     }
   #end
   
