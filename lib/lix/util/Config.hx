@@ -1,4 +1,4 @@
-package lix.server.util;
+package lix.util;
 
 import tink.url.*;
 
@@ -42,6 +42,11 @@ class Config {
     #end
     
   public static inline var SITE_PORT = 
+    #if (environment == "local")
+      2010;
+    #elseif (environment == "prod")
+      null;
+    #end
     
   public static var SITE_HOST = new Host(SITE_HOSTNAME, SITE_PORT);
   public static var SITE_URL = SITE_SCHEME + '://' + SITE_HOST;
