@@ -17,6 +17,10 @@ class Root extends BaseApi implements LocalRoot {
   public function files() return new FilesApi();
   #end
   
+  public function me(user:lix.api.auth.AuthUser) {
+    return new UserApi(CognitoId(user.id));
+  }
+  
   public function version() return {
     buildDate: lix.server.util.Macro.getBuildDate(),
     hash: lix.server.util.Macro.getGitSha(),
