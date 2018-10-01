@@ -7,6 +7,5 @@
 -lib tink_sql
 -lib tink_lang
 -lib tink_semver
--lib tink_http_fetch
 -lib tink_core_ext
 -lib hxnodejs
