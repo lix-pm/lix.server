@@ -10,7 +10,7 @@ import tink.sql.Types;
 using tink.CoreApi;
 
 class AuthUser {
-  public var id(default, null):Id<User>;
+  public var id(default, null):String;
   public var data(get, null):Promise<User>;
   
   var db = Db.get();
@@ -22,7 +22,7 @@ class AuthUser {
   
   function get_data() {
     if(data == null)
-      data = db.User.where(User.id == id).first();
+      data = db.User.where(User.cognitoId == id).first();
     return data;
   }
   
