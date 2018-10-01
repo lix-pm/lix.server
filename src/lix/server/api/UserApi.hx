@@ -8,4 +8,8 @@ class UserApi extends BaseApi implements lix.api.UserApi {
     super();
     this.username = username;
   }
+  
+  public function get() {
+    return db.User.where(User.username == username).first();
+  }
 }

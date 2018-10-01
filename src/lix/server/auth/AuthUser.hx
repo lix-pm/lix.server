@@ -9,7 +9,7 @@ import tink.sql.Types;
 
 using tink.CoreApi;
 
-class AuthUser {
+class AuthUser implements lix.api.auth.AuthUser {
   public var id(default, null):String;
   public var data(get, null):Promise<User>;
   
