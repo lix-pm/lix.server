@@ -26,7 +26,7 @@ class UserTest extends BaseTest {
     return asserts;
   }
   
-  public static function createUser(data = {username: 'dummy', password: 'dummy', nickname: 'Dummy', github_token: null}) {
-    return new UsersApi().create(data);
+  public static function createUser(data, cognitoId = 'dummy_cognito_id') {
+    return new UsersApi().create(data, new lix.server.auth.AuthUser(cognitoId));
   }
 }

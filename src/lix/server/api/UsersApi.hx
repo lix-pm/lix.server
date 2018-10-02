@@ -10,7 +10,15 @@ class UsersApi extends BaseApi implements lix.api.UsersApi {
       cognitoId: user.id,
       username: body.username,
       nickname: body.nickname,
-    }).next(_ -> db.User.where(User.username == body.username).first());
+    })
+      // TODO: need transaction in case owner name is taken
+      .next(function(uid) {
+        return db.Owner.insertOne({
+          id: null,
+          name: body.username,
+        }).swap(uid);
+      })
+      .next(_ -> db.User.where(User.username == body.username).first());
   }
   
   public function byName(username:String) 
