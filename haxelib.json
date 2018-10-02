@@ -10,6 +10,7 @@
   "releasenote": "initial release",
   "version": "0.0.0",
   "dependencies": {
+    "why-fs": "",
     "tink_semver": "",
     "tink_sql": ""
   }
