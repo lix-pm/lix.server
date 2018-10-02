@@ -15,7 +15,7 @@ class Db extends tink.sql.Database {
         inst = new Db(name, driver);
       }
     
-      #if tests
+      #if (environment == "test")
         local('lix_tests');
       #else
         switch Sys.getEnv('DATABASE_URL') {

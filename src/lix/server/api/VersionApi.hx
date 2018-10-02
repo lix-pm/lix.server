@@ -2,6 +2,8 @@ package lix.server.api;
 
 import why.Fs;
 
+using haxe.io.Path;
+
 class VersionApi extends BaseApi implements lix.api.VersionApi {
   public var owner(default, null):OwnerName;
   public var project(default, null):ProjectName;
@@ -33,5 +35,5 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
   }
   
   function getArchivePath()
-    return path(owner, project, version) + 'archive.zip';
+    return Path.join([path(owner, project, version), 'archive.zip']);
 }

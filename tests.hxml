@@ -7,4 +7,4 @@ common.hxml
 -lib tink_unittest
 -lib deep_equal
 
--D tests
+-D environment=test

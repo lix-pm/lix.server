@@ -27,7 +27,7 @@ class VersionTest extends BaseTest {
           var api = new BaseApi();
           @:privateAccess api.fs.list(api.path(username, project, version));
         },
-        items => {
+        items -> {
           asserts.assert(items.length == 1);
           asserts.assert(items[0] == 'archive.zip');
         }
@@ -35,7 +35,7 @@ class VersionTest extends BaseTest {
       async(
         // check API response
         () -> new VersionsApi(username, project).list(),
-        versions => {
+        versions -> {
           asserts.assert(versions.length == 1);
           asserts.assert(versions[0] == version);
         }
@@ -46,8 +46,8 @@ class VersionTest extends BaseTest {
   
   public static function createVersion(owner:String, project:String, version:String, ?archive:Bytes) {
     if(archive == null) archive = Bytes.ofString('dummy');
-    return new VersionApi(owner, project, version).url(true)
-      .next(function(o) {
+    return new VersionApi(owner, project, version).upload()
+      .next(o -> {
         var path = tink.Url.parse(o.url).query.toMap().get('path');
         return new FilesApi().upload(path, archive);
       });
