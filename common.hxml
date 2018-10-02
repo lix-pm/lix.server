@@ -8,4 +8,5 @@
 -lib tink_lang
 -lib tink_semver
 -lib tink_core_ext
+-lib why-fs
 -lib hxnodejs
