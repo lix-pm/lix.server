@@ -2,7 +2,6 @@ package;
 
 import haxe.io.Bytes;
 
-@:tink
 @:asserts
 class VersionTest extends BaseTest {
   
