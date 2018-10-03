@@ -8,7 +8,9 @@ import tink.http.clients.*;
 import tink.http.Response;
 import tink.http.Request;
 import tink.http.Header;
+import tink.http.Handler;
 import tink.http.Client;
+import tink.http.middleware.*;
 import tink.web.routing.*;
 import tink.web.proxy.Remote;
 import tink.url.Host;
@@ -21,7 +23,9 @@ class BaseTest {
     var router = new Router<Session, lix.api.Root>(new Root());
     var container = new LocalContainer();
     client = new LocalContainerClient(container);
-    container.run(req -> router.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError)).eager();
+    var handler:Handler = req -> router.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
+    // handler = handler.applyMiddleware(new Log());
+    container.run(handler).eager();
   }
   
   @:before
@@ -32,8 +36,11 @@ class BaseTest {
     ]);
   }
   
-  function remote(userId:Int) {
-    return new Remote<lix.api.Root>(client, new RemoteEndpoint(new Host('localhost', 1)));
+  function remote(id:Int) {
+    return new Remote<lix.api.Root>(
+      new TestClient(client, id),
+      new RemoteEndpoint(new Host('localhost', 1))
+    );
   }
   
   function async<T>(promise:Void->Promise<T>, ?assert:T->Void) {
@@ -52,17 +59,17 @@ class BaseTest {
 }
 
 class TestClient implements ClientObject {
-  var userId:Int;
+  var id:Int;
   var proxy:Client;
   
-  public function new(userId, proxy) {
-    this.userId = userId;
+  public function new(proxy, id) {
     this.proxy = proxy;
+    this.id = id;
   }
   
   public function request(req:OutgoingRequest):Promise<IncomingResponse> {
     return proxy.request(new OutgoingRequest(
-      req.header.concat([new HeaderField(AUTHORIZATION, 'Direct $userId')]),
+      req.header.concat([new HeaderField(AUTHORIZATION, 'Direct $id')]),
       req.body
     ));
   }

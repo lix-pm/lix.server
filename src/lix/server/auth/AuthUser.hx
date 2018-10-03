@@ -12,7 +12,7 @@ using lix.api.types.ProjectIdentifier;
 using tink.CoreApi;
 
 class AuthUser implements lix.api.auth.AuthUser {
-  public var id(default, null):String;
+  public var id(default, null):Int;
   public var data(get, null):Promise<User>;
   
   var db = Db.get();
@@ -24,7 +24,7 @@ class AuthUser implements lix.api.auth.AuthUser {
   
   function get_data() {
     if(data == null)
-      data = db.User.where(User.cognitoId == id).first();
+      data = db.User.where(User.id == id).first();
     return data;
   }
   

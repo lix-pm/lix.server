@@ -1,5 +1,5 @@
 common.hxml
--js bin/lambda.js
+-js bin/server/lambda.js
 lix.server.Server
 
 -D aws_lambda

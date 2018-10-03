@@ -1,6 +1,9 @@
-bin/storage
-bin/*.js
+bin/server/storage
+bin/server/*.js
+bin/pretoken/*.js
+bin/tests/*.js
 
 node_modules
 .serverless
 storage
+secret

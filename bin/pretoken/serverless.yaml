@@ -1,0 +1,31 @@
+service: pretoken
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'development'}
+  profile: lix
+  runtime: nodejs6.10
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "cognito-idp:AdminUpdateUserAttributes"
+      Resource: "*"
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./*.*
+    - node_modules/**
+
+functions:
+  index:
+    handler: lambda.index
+    events:
+      - cognitoUserPool:
+          pool: us-east-2_qNnxj1mU1
+          trigger: PostAuthentication # https://github.com/serverless/serverless/issues/4600
+          

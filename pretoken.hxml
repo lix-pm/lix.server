@@ -1,0 +1,3 @@
+common.hxml
+lix.server.PreToken
+-js bin/pretoken/lambda.js

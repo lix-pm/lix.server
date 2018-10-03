@@ -5,6 +5,7 @@
 -lib futurize
 -lib tink_web
 -lib tink_sql
+-lib tink_http_middleware
 -lib tink_lang
 -lib tink_semver
 -lib tink_core_ext

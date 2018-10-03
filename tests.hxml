@@ -2,9 +2,11 @@ common.hxml
 
 -cp tests
 -main RunTests
--js bin/tests.js
+-js bin/tests/tests.js
 
 -lib tink_unittest
 -lib deep_equal
 
 -D environment=test
+
+-cmd node bin/tests/tests.js

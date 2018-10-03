@@ -1,7 +1,7 @@
 package lix.api.auth;
 
 interface AuthUser {
-  var id(default, null):String;
+  var id(default, null):Int;
   function hasRole(target:Target, role:Role):Promise<Bool>;
 }
 

@@ -18,7 +18,7 @@ class Root extends BaseApi implements LocalRoot {
   #end
   
   public function me(user:lix.api.auth.AuthUser) {
-    return new UserApi(CognitoId(user.id));
+    return new UserApi(Id(user.id));
   }
   
   public function version() return {

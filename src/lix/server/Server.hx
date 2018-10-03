@@ -34,7 +34,7 @@ class Server {
     
     // init / update db (TODO: this shouldn't be here)
     var db = Db.get();
-    db.init().flatMap(function(o) return db.updateSchema()).eager();
+    db.init().flatMap(_ -> db.updateSchema()).eager();
     
     trace('running');
   }
