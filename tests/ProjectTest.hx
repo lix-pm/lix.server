@@ -31,6 +31,11 @@ class ProjectTest extends BaseTest {
         () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
+      async(
+        // should not appear under another owner
+        () -> new OwnerProjectsApi(username + 'another').list(),
+        projects => asserts.assert(projects.length == 0)
+      ),
     ]).handle(asserts.handle);
     return asserts;
   }
@@ -66,7 +71,7 @@ class ProjectTest extends BaseTest {
         projects => asserts.assert(projects.length == 1)
       ),
       async(
-        // filter with tag
+        // filter with wrong tag
         () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
