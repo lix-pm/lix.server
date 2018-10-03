@@ -4,6 +4,11 @@ dist: trusty
 language: node_js
 node_js: 8
 
+cache:
+  yarn: true
+  directories:
+    - $HOME/haxe
+
 services:
   - mysql
 
@@ -32,6 +37,6 @@ script:
   - haxe build-prod.hxml
   
 after_success:
-  - cd bin
+  - cd bin/server
   - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile lix
   - serverless deploy --stage production
