@@ -9,4 +9,4 @@ common.hxml
 
 -D environment=test
 
--cmd node bin/tests/tests.js
+# -cmd node bin/tests/tests.js
