@@ -23,12 +23,12 @@ class ProjectTest extends BaseTest {
       ),
       async(
         // list all projects
-        () -> new ProjectsApi(Owner(username)).list(),
+        () -> new OwnerProjectsApi(username).list(),
         projects => asserts.assert(projects.length == 1)
       ),
       async(
         // filter with tag
-        () -> new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
     ]).handle(asserts.handle);
@@ -62,18 +62,23 @@ class ProjectTest extends BaseTest {
       ),
       async(
         // list all projects
-        () -> new ProjectsApi(Owner(username)).list(),
+        () -> new OwnerProjectsApi(username).list(),
         projects => asserts.assert(projects.length == 1)
       ),
       async(
         // filter with tag
-        () -> new ProjectsApi(Owner(username)).list({tags: ['dummy']}),
+        () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
         projects => asserts.assert(projects.length == 0)
       ),
       async(
         // filter with tag
-        () -> new ProjectsApi(Owner(username)).list({tags: ['tag1']}),
+        () -> new OwnerProjectsApi(username).list({tags: ['tag1']}),
         projects => asserts.assert(projects.length == 1)
+      ),
+      async(
+        // should not appear under another owner
+        () -> new OwnerProjectsApi(username + 'another').list(),
+        projects => asserts.assert(projects.length == 0)
       ),
     ]).handle(asserts.handle);
     return asserts;
@@ -98,6 +103,6 @@ class ProjectTest extends BaseTest {
   }
   
   public static function createProject(owner:String, data = {name: 'project-name', url:(null:String), description:(null:String), tags:(null:Array<String>)}) {
-    return new ProjectsApi(Owner(owner)).create(data);
+    return new OwnerProjectsApi(owner).create(data);
   }
 }

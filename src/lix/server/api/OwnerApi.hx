@@ -2,13 +2,13 @@ package lix.server.api;
 
 class OwnerApi extends BaseApi implements lix.api.OwnerApi {
   
-  var name:String;
+  var owner:OwnerName;
 
-  public function new(name:String) {
+  public function new(owner) {
     super();
-    this.name = name;
+    this.owner = owner;
   }
   
   public function projects()
-    return new ProjectsApi(Owner(name));
+    return new OwnerProjectsApi(owner);
 }
