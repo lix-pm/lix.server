@@ -26,7 +26,7 @@ install:
   - lix download
   
 script:
-  - haxe tests.hxml && node bin/tests.js
+  - haxe tests.hxml && pushd bin/tests && yarn && node tests.js && popd
   - haxe build-prod.hxml
   
 after_success:
