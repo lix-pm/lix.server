@@ -22,11 +22,13 @@ before_install:
   
 install:
   - yarn global add lix serverless
-  - pushd bin && yarn && popd
+  - pushd bin/tests && yarn && popd
+  - pushd bin/server && yarn && popd
+  - pushd bin/pretoken && yarn && popd
   - lix download
   
 script:
-  - haxe tests.hxml && pushd bin/tests && yarn && node tests.js && popd
+  - haxe tests.hxml && node bin/tests/tests.js
   - haxe build-prod.hxml
   
 after_success:
