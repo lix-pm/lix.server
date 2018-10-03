@@ -29,16 +29,18 @@ class BaseApi {
     #end ;
   var db = Db.get();
   
-  function path(?owner:OwnerName, ?project:ProjectName, ?version:String) {
-    var path = '/libraries';
-    if(owner != null) {
-      path += '/$owner';
-      if(project != null) {
-        path += '/$project';
-        if(version != null)
-          path += '/$version';
-      }
-    }
-    return path;
+  function path(id:ProjectIdentifier, ?version:String):Promise<String> {
+    return (switch id.sanitize() {
+      case Success(Id(id)):
+        Promise.lift('$path/$id');
+      case Success(Name(owner, name)):
+        db.Owner
+          .leftJoin(db.Project).on(Project.owner == Owner.id)
+          .where(Owner.name == owner && Project.name == name)
+          .first()
+          .next(o -> '$path/${o.Project.id}');
+      case Failure(e):
+        Promise.lift(e);
+    }).next(path -> version == null ? path : '$path/$version');
   }
 }

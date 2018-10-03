@@ -24,7 +24,7 @@ class VersionTest extends BaseTest {
         // make sure the file exists in fs
         () -> {
           var api = new BaseApi();
-          @:privateAccess api.fs.list(api.path(username, project, version));
+          @:privateAccess api.path(Slug('$username/$project'), version).next(path -> api.fs.list(path));
         },
         items -> {
           asserts.assert(items.length == 1);
@@ -33,7 +33,7 @@ class VersionTest extends BaseTest {
       ),
       async(
         // check API response
-        () -> new VersionsApi(username, project).list(),
+        () -> new VersionsApi(Slug('$username/$project')).list(),
         versions -> {
           asserts.assert(versions.length == 1);
           asserts.assert(versions[0] == version);
@@ -45,7 +45,7 @@ class VersionTest extends BaseTest {
   
   public static function createVersion(owner:String, project:String, version:String, ?archive:Bytes) {
     if(archive == null) archive = Bytes.ofString('dummy');
-    return new VersionApi(owner, project, version).upload()
+    return new VersionApi(Slug('$owner/$project'), version).upload()
       .next(o -> {
         var path = tink.Url.parse(o.url).query.toMap().get('path');
         return new FilesApi().upload(path, archive);

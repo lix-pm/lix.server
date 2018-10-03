@@ -1,18 +1,16 @@
 package lix.server.api;
 
 class VersionsApi extends BaseApi implements lix.api.VersionsApi {
-  var owner:OwnerName;
-  var project:ProjectName;
+  var id:ProjectIdentifier;
   
-  public function new(owner, project) {
+  public function new(id) {
     super();
-    this.owner = owner;
-    this.project = project;
+    this.id = id;
   } 
   
   public function list():Promise<Array<String>> {
-    var folder = path(owner, project);
-    return fs.list(folder)
+    return path(id)
+      .next(folder -> fs.list(folder))
       .next(function(items):Array<String> {
         var ret = new Map();
         for(item in items) ret.set(item.split('/')[0], true);
@@ -21,5 +19,5 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
   }
     
   public function ofVersion(version:String):VersionApi
-    return new VersionApi(owner, project, version);
+    return new VersionApi(id, version);
 }

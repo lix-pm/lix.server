@@ -7,5 +7,5 @@ interface AuthUser {
 
 enum Target {
   Owner(owner:OwnerName);
-  Project(owner:OwnerName, project:ProjectName);
+  Project(id:ProjectIdentifier);
 }

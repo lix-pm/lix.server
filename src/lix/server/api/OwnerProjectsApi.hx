@@ -36,9 +36,8 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
       .next(function(project) return project.info());
   }
   
-  public function byName(name:ProjectName):lix.api.ProjectApi {
-    return new ProjectApi(owner, name);
-  }
+  public function byName(name:ProjectName):lix.api.ProjectApi
+    return new ProjectApi(Slug('$owner/$name'));
   
   override function _list(?filter:ProjectFilter) {
     return db.Project

@@ -3,9 +3,6 @@ package lix.api;
 import why.Fs;
 
 interface VersionApi {
-  var owner(default, null):OwnerName;
-  var project(default, null):ProjectName;
-  
   // @:post('/')
   // @:params(archive = body)
   // function submit(archive:tink.io.Source.RealSource):Promise<tink.Url>;
@@ -14,6 +11,8 @@ interface VersionApi {
   public function download():Promise<UrlRequest>;
   
   @:put('/')
-  @:restrict(user.hasRole(Project(this.owner, this.project), Publisher))
+  @:restrict(this.canUpload(user))
   public function upload():Promise<UrlRequest>;
+  
+  function canUpload(user:AuthUser):Promise<Bool>;
 }

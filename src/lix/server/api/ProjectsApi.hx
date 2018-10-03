@@ -27,6 +27,13 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
       });
   }
   
+  public function byId(id:String) {
+    return new ProjectApi(switch (id:tink.Stringly).parseInt() {
+      case Success(int): Id(int);
+      case Failure(_): Slug(id);
+    });
+  }
+  
   function _list(?filter:ProjectFilter):Promise<Array<{project:Project, projectTag:ProjectTag}>> {
     return db.Project
       .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)

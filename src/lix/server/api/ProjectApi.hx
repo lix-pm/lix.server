@@ -2,33 +2,41 @@ package lix.server.api;
 
 class ProjectApi extends BaseApi implements lix.api.ProjectApi {
 
-  var owner:OwnerName;
-  var name:ProjectName;
+  var id:ProjectIdentifier;
   
-  public function new(owner, name) {
+  public function new(id) {
     super();
-    this.owner = owner;
-    this.name = name;
+    this.id = id;
   }
 
   public function info():Promise<ProjectDescription> {
-    return db.Owner
-      .leftJoin(db.Project).on(Project.owner == Owner.id)
-      .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
-      .where(Owner.name == owner && Project.name == name)
-      .all()
-      .next(function(o) {
-        var project = o[0].Project;
-        return {
-          name: project.name,
-          description: project.description,
-          tags: [for(o in o) if(o.ProjectTag != null) o.ProjectTag.tag],
-          deprecated: project.deprecated,
-          authors: [], // TODO
-        }
-      });
+    return switch id.sanitize() {
+      case Success(sanitized):
+        db.Owner
+          .leftJoin(db.Project).on(Project.owner == Owner.id)
+          .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
+          .where(switch sanitized {
+            case Id(id):
+              Project.id == id;
+            case Name(owner, name):
+              Owner.name == owner && Project.name == name;
+          })
+          .all()
+          .next(function(o) {
+            var project = o[0].Project;
+            return {
+              name: project.name,
+              description: project.description,
+              tags: [for(o in o) if(o.ProjectTag != null) o.ProjectTag.tag],
+              deprecated: project.deprecated,
+              authors: [], // TODO
+            }
+          });
+      case Failure(e):
+        e;
+    }
   }
 
   public function versions():VersionsApi 
-    return new VersionsApi(owner, name);
+    return new VersionsApi(id);
 }

@@ -5,35 +5,41 @@ import why.Fs;
 using haxe.io.Path;
 
 class VersionApi extends BaseApi implements lix.api.VersionApi {
-  public var owner(default, null):OwnerName;
-  public var project(default, null):ProjectName;
+  public var id(default, null):ProjectIdentifier;
   var version:String;
   
-  public function new(owner, project, version) {
+  public function new(id, version) {
     super();
-    this.owner = owner;
-    this.project = project;
+    this.id = id;
     this.version = version;
   }
   
   public function download():Promise<UrlRequest> {
-    var path = getArchivePath();
-    return fs.exists(path)
-      .next(exists -> {
-        if(exists) fs.getDownloadUrl(path, {isPublic: true});
-        else new Error(NotFound, 'Archive $owner/$project#$version does not exists');
+    return getArchivePath()
+      .next(path -> {
+        fs.exists(path)
+          .next(exists -> {
+            if(exists) fs.getDownloadUrl(path, {isPublic: true});
+            else new Error(NotFound, 'Archive does not exists');
+          });
       });
   }
   
   public function upload():Promise<UrlRequest> {
-    var path = getArchivePath();
-    return fs.exists(path)
-      .next(exists -> {
-        if(!exists) fs.getUploadUrl(path, {isPublic: true, mime: 'application/zip'});
-        else new Error(Conflict, 'Archive $owner/$project#$version alraedy exists');
+    return getArchivePath()
+      .next(path -> {
+        fs.exists(path)
+          .next(exists -> {
+            if(!exists) fs.getUploadUrl(path, {isPublic: true, mime: 'application/zip'});
+            else new Error(Conflict, 'Archive already exists');
+          });
       });
   }
   
+  public function canUpload(user:lix.api.auth.AuthUser):Promise<Bool>
+    return user.hasRole(Project(id), Publisher);
+  
   function getArchivePath()
-    return Path.join([path(owner, project, version), 'archive.zip']);
+    return path(id, version).next(path -> return Path.join([path, 'archive.zip']));
+    
 }
