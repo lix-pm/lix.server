@@ -1,5 +1,5 @@
 import lix.api.types.*;
-import lix.server.auth.*;
+import lix.api.auth.*;
 import tink.http.Response;
 import tink.http.Header;
 import tink.sql.Types;

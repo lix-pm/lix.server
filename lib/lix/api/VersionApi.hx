@@ -3,14 +3,10 @@ package lix.api;
 import why.Fs;
 
 interface VersionApi {
-  // @:post('/')
-  // @:params(archive = body)
-  // function submit(archive:tink.io.Source.RealSource):Promise<tink.Url>;
-  
-  @:get('/')
+  @:get('/archive')
   public function download():Promise<UrlRequest>;
   
-  @:put('/')
+  @:put('/archive')
   @:restrict(this.canUpload(user))
   public function upload():Promise<UrlRequest>;
   

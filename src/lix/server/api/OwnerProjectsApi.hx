@@ -60,7 +60,7 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
       });
   }
   
-  public function canCreate(user:lix.api.auth.AuthUser):Promise<Bool> {
+  public function canCreate(user:AuthUser):Promise<Bool> {
     return user.hasRole(Owner(owner), Admin);
   }
 }

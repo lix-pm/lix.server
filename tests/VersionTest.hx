@@ -8,7 +8,7 @@ class VersionTest extends BaseTest {
   public function create() {
     var username = 'my_username';
     var project = 'my_project';
-    var version = '1.0.0';
+    var version = new Version(1, 0, 0);
     
     Promise.inSequence([
       async(
@@ -36,16 +36,22 @@ class VersionTest extends BaseTest {
         () -> new VersionsApi(Slug('$username/$project')).list(),
         versions -> {
           asserts.assert(versions.length == 1);
-          asserts.assert(versions[0] == version);
+          asserts.assert(versions[0].version == version);
         }
       ),
     ]).handle(asserts.handle);
     return asserts;
   }
   
-  public static function createVersion(owner:String, project:String, version:String, ?archive:Bytes) {
+  public static function createVersion(owner:String, project:String, version:Version, ?archive:Bytes) {
     if(archive == null) archive = Bytes.ofString('dummy');
-    return new VersionApi(Slug('$owner/$project'), version).upload()
+    return new ProjectApi(Slug('$owner/$project')).versions()
+      .create({
+        version: version,
+        dependencies: [],
+        haxe: null,
+      })
+      .next(v -> new VersionApi(Slug('$owner/$project'), version).upload())
       .next(o -> {
         var path = tink.Url.parse(o.url).query.toMap().get('path');
         return new FilesApi().upload(path, archive);

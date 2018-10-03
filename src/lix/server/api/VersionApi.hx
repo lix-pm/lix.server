@@ -6,7 +6,7 @@ using haxe.io.Path;
 
 class VersionApi extends BaseApi implements lix.api.VersionApi {
   public var id(default, null):ProjectIdentifier;
-  var version:String;
+  var version:Version;
   
   public function new(id, version) {
     super();
@@ -36,7 +36,7 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
       });
   }
   
-  public function canUpload(user:lix.api.auth.AuthUser):Promise<Bool>
+  public function canUpload(user:AuthUser):Promise<Bool>
     return user.hasRole(Project(id), Publisher);
   
   function getArchivePath()

@@ -3,7 +3,7 @@ package lix.server.api;
 import lix.api.UsersApi;
 
 class UsersApi extends BaseApi implements lix.api.UsersApi {
-  public function create(body:NewUserData, user:lix.api.auth.AuthUser):Promise<User> {
+  public function create(body:NewUserData, user:AuthUser):Promise<User> {
     // TODO: validate username
     return db.User.insertOne({
       id: null,
