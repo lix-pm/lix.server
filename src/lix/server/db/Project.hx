@@ -1,10 +1,10 @@
 package lix.server.db;
 
 typedef Project = {
-  @:primary @:autoIncrement var id(default, never):Id<Project>;
-  var name(default, never):VarChar<255>;
-  var owner(default, never):Id<Owner>;
-  @:optional var description(default, never):VarChar<1024>;
-  @:optional var url(default, never):VarChar<1024>;
-  var deprecated(default, never):Bool;
+  @:primary @:autoIncrement final id:Id<Project>;
+  final name:VarChar<255>;
+  final owner:Id<Owner>;
+  @:optional final description:VarChar<1024>;
+  @:optional final url:VarChar<1024>;
+  final deprecated:Bool;
 }

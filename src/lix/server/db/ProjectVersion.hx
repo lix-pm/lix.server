@@ -1,8 +1,8 @@
 package lix.server.db;
 
 typedef ProjectVersion = {
-  var project(default, never):Id<Project>;
-  var version(default, never):VarChar<255>;
-  var published(default, never):DateTime;
-  var deprecated(default, never):Bool;
+  final project:Id<Project>;
+  final version:VarChar<255>;
+  final published:DateTime;
+  final deprecated:Bool;
 }
