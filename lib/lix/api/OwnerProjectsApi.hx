@@ -7,7 +7,7 @@ interface OwnerProjectsApi extends ProjectsApi {
   function create(data:{name:String, ?url:String, ?description:String, ?tags:Array<String>}):Promise<ProjectDescription>;
   
   @:sub('/$name')
-  function byName(name:ProjectName):Promise<ProjectApi>;
+  function byName(name:ProjectName):ProjectApi;
   
   function canCreate(user:AuthUser):Promise<Bool>;
 }

@@ -2,6 +2,7 @@ package lix.server.auth;
 
 import lix.server.db.Db;
 import lix.server.db.User;
+import lix.api.auth.AuthUser;
 import lix.api.types.OwnerName;
 import lix.api.types.ProjectName;
 import lix.api.types.Role;
@@ -57,9 +58,4 @@ class AuthUser implements lix.api.auth.AuthUser {
       }
     });
   }
-}
-
-private enum Target {
-  Owner(owner:OwnerName);
-  Project(owner:OwnerName, project:ProjectName);
 }

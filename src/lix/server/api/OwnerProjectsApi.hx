@@ -2,7 +2,7 @@ package lix.server.api;
 
 import lix.server.db.*;
 
-class OwnerProjectsApi extends ProjectsApi {
+class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
   var owner:OwnerName;
   
   public function new(owner) {
@@ -59,5 +59,9 @@ class OwnerProjectsApi extends ProjectsApi {
           projectTag: v.ProjectTag
         }];
       });
+  }
+  
+  public function canCreate(user:lix.api.auth.AuthUser):Promise<Bool> {
+    return user.hasRole(Owner(owner), Admin);
   }
 }
