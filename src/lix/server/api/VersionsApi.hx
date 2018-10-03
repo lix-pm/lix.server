@@ -14,9 +14,9 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
       .next(id -> {
         db.ProjectVersion.insertOne({
           project: id,
-          version: data.version.toString(), // TODO: make it an implicit cast
-          dependencies: data.dependencies.toString(),
-          haxe: data.haxe.toString(),
+          version: data.version,
+          dependencies: data.dependencies,
+          haxe: data.haxe,
           published: now,
           deprecated: false,
         });

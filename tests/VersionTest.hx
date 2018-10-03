@@ -7,12 +7,14 @@ class VersionTest extends BaseTest {
   
   public function create() {
     var username = 'my_username';
+    var userId;
     var project = 'my_project';
     var version = new Version(1, 0, 0);
     
     Promise.inSequence([
       async(
-        () -> UserTest.createUser({username: username})
+        () -> UserTest.createUser({username: username}),
+        user -> userId = user.id
       ),
       async(
         () -> ProjectTest.createProject(username, {name: project})
@@ -32,8 +34,16 @@ class VersionTest extends BaseTest {
         }
       ),
       async(
-        // check API response
+        // check raw response
         () -> new VersionsApi(Slug('$username/$project')).list(),
+        versions -> {
+          asserts.assert(versions.length == 1);
+          asserts.assert(versions[0].version == version);
+        }
+      ),
+      async(
+        // check remote response
+        () -> remote(userId).projects().byId('$username/$project').versions().list(),
         versions -> {
           asserts.assert(versions.length == 1);
           asserts.assert(versions[0].version == version);
