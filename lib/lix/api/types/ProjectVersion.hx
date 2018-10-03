@@ -5,4 +5,5 @@ typedef ProjectVersion = {
   var dependencies(default, never):Array<Dependency>;
   var haxe(default, never):Constraint;
   var published(default, never):Date;
+  var deprecated(default, never):Bool;
 }
