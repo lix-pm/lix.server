@@ -8,7 +8,9 @@ import tink.semver.*;
 import tink.http.Request;
 import tink.http.Response;
 import tink.http.Container;
+import tink.http.Handler;
 import tink.http.containers.*;
+import tink.http.middleware.*;
 import tink.web.routing.Router;
 import tink.web.routing.Context;
 
@@ -28,9 +30,9 @@ class Server {
   
   static function run(container:Container) {
     var r = new Router<Session, LocalRoot>(new Root());
-    container.run(function (req:IncomingRequest) {
-      return r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
-    });
+    var handler:Handler = req -> r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
+    handler = handler.applyMiddleware(new Log());
+    container.run(handler).eager();
     
     // init / update db (TODO: this shouldn't be here)
     var db = Db.get();

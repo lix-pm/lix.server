@@ -12,8 +12,8 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
   
   public function create(data:{name:String, ?url:String, ?description:String, ?tags:Array<String>}) {
     return db.Owner.where(Owner.name == owner).first()
-      .next(function(o) {
-        return db.Project.insertOne({
+      .next(o -> {
+        db.Project.insertOne({
           id: null,
           name: data.name,
           owner: o.id,
@@ -22,8 +22,8 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
           deprecated: false,
         });
       })
-      .next(function(id:tink.sql.Types.Id<lix.server.db.Project>) {
-        return switch data.tags {
+      .next((id:tink.sql.Types.Id<lix.server.db.Project>) -> {
+        switch data.tags {
           case null | []: id;
           case tags: 
             db.ProjectTag.insertMany([for(tag in tags) {
@@ -32,8 +32,8 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
             }]).swap(id);
         }
       })
-      .next(function(id) return byName(data.name))
-      .next(function(project) return project.info());
+      .next(id -> byName(data.name))
+      .next(project -> project.info());
   }
   
   public function byName(name:ProjectName):lix.api.ProjectApi

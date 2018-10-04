@@ -22,9 +22,9 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
               Owner.name == owner && Project.name == name;
           })
           .all()
-          .next(function(o) {
+          .next(o -> {
             var project = o[0].Project;
-            return {
+            {
               name: project.name,
               description: project.description,
               tags: [for(o in o) if(o.ProjectTag != null) o.ProjectTag.tag],

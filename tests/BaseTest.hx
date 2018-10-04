@@ -31,7 +31,7 @@ class BaseTest {
   @:before
   public function init() {
     return Promise.inParallel([
-      @:privateAccess new BaseApi().fs.delete('/').recover(function(_) return Noise),
+      @:privateAccess new BaseApi().fs.delete('/').recover(_ -> Noise),
       db.destroy().flatMap(_ -> db.init()),
     ]);
   }
