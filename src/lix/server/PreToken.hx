@@ -6,6 +6,13 @@ import js.aws.cognitoidentityserviceprovider.*;
 
 using tink.CoreApi;
 
+/**
+ * Pre Token Generation hook for Cognito
+ * 
+ * Check if the cognito user contains the "custom:lix_userid" attribute.
+ * If not, look for (or create) the cognito user in lix database
+ * and add the lix user id as "custom:lix_userid" attribute in Cognito
+ */
 @:build(futurize.Futurize.build())
 class PreToken {
   @:expose('index') @:keep
