@@ -29,7 +29,7 @@ class Session {
         }
       case Success(Basic(username, password)):
         new Error(BadRequest, 'Basic authorization is not supported');
-      #if (environment == "test")
+      #if ((environment == "test") || (environment == "local"))
       case Success(Others('Direct', Std.parseInt(_) => id)) if(id != null): 
           Some(new AuthUser(id));
       #end

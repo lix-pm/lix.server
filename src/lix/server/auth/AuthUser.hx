@@ -30,6 +30,7 @@ class AuthUser implements lix.api.auth.AuthUser {
   
   public function hasRole(target:Target, role:Role):Promise<Bool> {
     function check(actual:Role):Promise<Bool> {
+      if(actual == null) return false;
       var roles:Array<Role> = switch role {
         case Publisher: [Owner, Admin, Publisher];
         case Admin: [Owner, Admin];
@@ -45,21 +46,26 @@ class AuthUser implements lix.api.auth.AuthUser {
         case Owner(owner):
           db.Owner
             .leftJoin(db.OwnerRole).on(OwnerRole.owner == Owner.id)
-            .where(Owner.name == owner )
+            .where(Owner.name == owner)
             .first()
-            .next(o -> check(o.OwnerRole.role));
+            .next(o -> check(o.OwnerRole == null ? null : o.OwnerRole.role))
+            .recover(_ -> false);
         case Project(id):
           switch id.sanitize() {
             case Success(sanitized):
               db.Owner
-                .leftJoin(db.Project).on(Project.owner == Owner.id)
+                .join(db.Project).on(Project.owner == Owner.id)
                 .leftJoin(db.ProjectRole).on(ProjectRole.project == Project.id)
                 .where(switch sanitized {
                   case Id(id): Project.id == id;
                   case Name(owner, project): Owner.name == owner && Project.name == project;
                 })
                 .first()
-                .next(o -> check(o.ProjectRole.role).next(has -> has ? true : hasRole(Owner(o.Project.owner), role)));
+                .next(o -> {
+                  check(o.ProjectRole == null ? null : o.ProjectRole.role)
+                    .recover(_ -> false)
+                    .next(has -> has ? true : hasRole(Owner(o.Owner.name), role));
+                });
               
             case Failure(e):
               e;
