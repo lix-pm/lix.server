@@ -10,7 +10,7 @@ interface VersionsApi {
   function list():Promise<Array<ProjectVersion>>;
   
   @:sub('/$version')
-  function ofVersion(version:Version):VersionApi;
+  function byVersion(version:Version):VersionApi;
   
   function canCreate(user:AuthUser):Promise<Bool>;
 }
