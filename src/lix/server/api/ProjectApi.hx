@@ -23,6 +23,7 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
           })
           .all()
           .next(o -> {
+            if(o.length == 0) return new Error(NotFound, 'Not found');
             var project = o[0].Project;
             var owner = o[0].Owner;
             ({
