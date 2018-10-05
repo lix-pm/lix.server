@@ -1,6 +1,6 @@
 package lix.server.db;
 
 typedef ProjectTag = {
-  final project:Id<Project>;
-  final tag:VarChar<255>;
+  @:primary final project:Id<Project>;
+  @:primary final tag:VarChar<255>;
 }

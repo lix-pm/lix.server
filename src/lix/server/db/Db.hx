@@ -4,7 +4,7 @@ import tink.sql.drivers.MySql;
 
 using tink.CoreApi;
 
-@:tables(Project, User, ProjectVersion, ProjectTag, ProjectRole, Owner, OwnerRole)
+@:tables(Project, User, ProjectVersion, ProjectVersionDependency, ProjectTag, ProjectRole, Owner, OwnerRole)
 class Db extends tink.sql.Database {
   
   static var inst:Db;
@@ -40,6 +40,7 @@ abstract DbWrapper(Db) from Db {
       this.Project.create(),
       this.User.create(),
       this.ProjectVersion.create(),
+      this.ProjectVersionDependency.create(),
       this.ProjectTag.create(),
       this.ProjectRole.create(),
       this.Owner.create(),
@@ -52,6 +53,7 @@ abstract DbWrapper(Db) from Db {
       this.Project.drop(),
       this.User.drop(),
       this.ProjectVersion.drop(),
+      this.ProjectVersionDependency.drop(),
       this.ProjectTag.drop(),
       this.ProjectRole.drop(),
       this.Owner.drop(),
@@ -64,6 +66,7 @@ abstract DbWrapper(Db) from Db {
       this.Project.diffSchema().next(this.Project.updateSchema),
       this.User.diffSchema().next(this.User.updateSchema),
       this.ProjectVersion.diffSchema().next(this.ProjectVersion.updateSchema),
+      this.ProjectVersionDependency.diffSchema().next(this.ProjectVersionDependency.updateSchema),
       this.ProjectTag.diffSchema().next(this.ProjectTag.updateSchema),
       this.ProjectRole.diffSchema().next(this.ProjectRole.updateSchema),
       this.Owner.diffSchema().next(this.Owner.updateSchema),
