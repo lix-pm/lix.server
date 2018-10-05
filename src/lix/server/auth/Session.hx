@@ -50,22 +50,19 @@ class Session {
     
     return jwk.next(keys -> {
       switch Codec.decode(token) {
-        case Success({a: header, b: body}):
-          switch keys[header.kid] {
-            case null:
-              new Error('key not found');
-            case key:
-              var crypto = new NodeCrypto();
-              var verifier = new BasicVerifier(
-                RS256({publicKey: key}),
-                crypto,
-                {
-                  iss: 'https://cognito-idp.$COGNITO_POOL_REGION.amazonaws.com/$COGNITO_POOL_ID',
-                  aud: COGNITO_CLIENT_ID,
-                }
-              );
-              verifier.verify(token);
-          }
+        case Success({a: keys[_.kid] => null}):
+          new Error('key not found');
+        case Success({a: keys[_.kid] => key}):
+          var crypto = new NodeCrypto();
+          var verifier = new BasicVerifier(
+            RS256({publicKey: key}),
+            crypto,
+            {
+              iss: 'https://cognito-idp.$COGNITO_POOL_REGION.amazonaws.com/$COGNITO_POOL_ID',
+              aud: COGNITO_CLIENT_ID,
+            }
+          );
+          verifier.verify(token);
         case Failure(e):
           e;
       }
