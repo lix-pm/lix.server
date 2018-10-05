@@ -41,7 +41,18 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
         e;
     }
   }
-
+  
+  public function deprecate(message:String):Promise<Noise> {
+    return getProjectId(id)
+      .next(pid -> db.Project.update(
+        p -> [p.deprecated.set(message)],
+        {where: p -> p.id == pid}
+      ));
+  }
+  
   public function versions():VersionsApi 
     return new VersionsApi(id);
+  
+  public function canDeprecate(user:AuthUser):Promise<Bool>
+    return user.hasRole(Project(id), Publisher);
 }

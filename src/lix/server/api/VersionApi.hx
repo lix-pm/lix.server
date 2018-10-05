@@ -36,7 +36,18 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
       });
   }
   
+  public function deprecate(message:String):Promise<Noise> {
+    return getProjectId(id)
+      .next(pid -> db.ProjectVersion.update(
+        v -> [v.deprecated.set(message)],
+        {where: v -> v.project == pid && v.version == version}
+      ));
+  }
+  
   public function canUpload(user:AuthUser):Promise<Bool>
+    return user.hasRole(Project(id), Publisher);
+  
+  public function canDeprecate(user:AuthUser):Promise<Bool>
     return user.hasRole(Project(id), Publisher);
   
   function getArchivePath()
