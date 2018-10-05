@@ -2,21 +2,21 @@ package lix.server.api;
 
 class OwnersApi extends BaseApi implements lix.api.OwnersApi {
   
-  public function create(data:{name:OwnerName, admin:Int}) {
+  public function create(name:OwnerName, user:AuthUser) {
     // TODO: transaction
     return db.Owner.insertOne({
       id: null,
-      name: data.name
+      name: name
     })
       .next(id -> {
         db.OwnerRole.insertOne({
-          user: data.admin,
+          user: user.id,
           owner: id,
           role: Admin,
         })
           .swap({
             id: id,
-            name: data.name
+            name: name
           });
       });
   }

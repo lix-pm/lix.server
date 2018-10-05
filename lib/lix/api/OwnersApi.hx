@@ -2,8 +2,8 @@ package lix.api;
 
 interface OwnersApi {
   @:post('/')
-  @:params(data = body)
-  function create(data:{name:OwnerName, admin:Int}):Promise<OwnerInfo>;
+  @:params(name in body)
+  function create(name:OwnerName, user:AuthUser):Promise<OwnerInfo>;
     
   @:sub('/$name')
   function byName(name:OwnerName):OwnerApi;
