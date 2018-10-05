@@ -5,5 +5,5 @@ typedef ProjectVersion = {
   final dependencies:Array<Dependency>;
   final haxe:Constraint;
   final published:Date;
-  final deprecated:Bool;
+  @:optional final deprecated:String;
 }

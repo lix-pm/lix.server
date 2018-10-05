@@ -18,7 +18,7 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
             version: data.version,
             haxe: data.haxe,
             published: now,
-            deprecated: false,
+            deprecated: null,
           }).noise(),
           db.ProjectVersionDependency.insertMany([for(dep in data.dependencies) {
             project: id,
@@ -33,7 +33,7 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
         dependencies: data.dependencies,
         haxe: data.haxe,
         published: now,
-        deprecated: false,
+        deprecated: null,
       }:ProjectVersion));
   }
   

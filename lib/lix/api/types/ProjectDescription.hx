@@ -8,5 +8,5 @@ typedef ProjectDescription = {
   @:optional final url:String;
   @:optional final description:String;
   @:optional final tags:Array<Tag>;
-  @:optional final deprecated:Bool;
+  @:optional final deprecated:String;
 }

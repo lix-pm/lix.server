@@ -21,7 +21,7 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
           owner: o.id,
           description: data.description,
           url: data.url,
-          deprecated: false,
+          deprecated: null,
         });
       })
       // TODO handle authors

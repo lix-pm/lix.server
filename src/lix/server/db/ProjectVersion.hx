@@ -5,5 +5,5 @@ typedef ProjectVersion = {
   @:primary final version:VarChar<255>;
   final haxe:VarChar<1000>;
   final published:DateTime;
-  final deprecated:Bool;
+  @:optional final deprecated:MediumText;
 }

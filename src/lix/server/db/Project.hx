@@ -6,5 +6,5 @@ typedef Project = {
   @:unique('slug') final owner:Id<Owner>;
   @:optional final description:VarChar<1024>;
   @:optional final url:VarChar<1024>;
-  final deprecated:Bool;
+  @:optional final deprecated:MediumText;
 }
