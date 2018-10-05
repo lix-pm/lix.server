@@ -24,7 +24,7 @@ class Session {
       case Success(Bearer(token)):
         verifyToken(token).next(payload -> {
           switch (cast payload:DynamicAccess<String>)['custom:lix_userid'] {
-            case null | Std.parseInt(_) => null: Promise.lift(new Error(Unauthorized, 'Required attribute missing'));
+            case null | Std.parseInt(_) => null: Promise.lift(new Error(Unauthorized, 'Required attribute missing from the token'));
             case Std.parseInt(_) => id: Promise.lift(Some(new AuthUser(id)));
           }
         });
