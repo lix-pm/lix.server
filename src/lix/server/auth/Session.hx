@@ -59,7 +59,10 @@ class Session {
               var verifier = new BasicVerifier(
                 RS256({publicKey: key}),
                 crypto,
-                {iss: 'https://cognito-idp.$COGNITO_POOL_REGION.amazonaws.com/$COGNITO_POOL_ID'}
+                {
+                  iss: 'https://cognito-idp.$COGNITO_POOL_REGION.amazonaws.com/$COGNITO_POOL_ID',
+                  aud: COGNITO_CLIENT_ID,
+                }
               );
               verifier.verify(token);
           }
