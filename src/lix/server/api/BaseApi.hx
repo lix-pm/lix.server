@@ -17,7 +17,7 @@ class BaseApi {
     #else
       new Local({
         root: './storage',
-        getDownloadUrl: path -> {
+        getDownloadUrl: (path, _) -> {
           url: '$API_SERVER_URL/files?path=$path',
           method: GET,
         },
