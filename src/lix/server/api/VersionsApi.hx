@@ -82,6 +82,6 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
     return new VersionApi(id, version);
     
   public function canCreate(user:AuthUser):Promise<Bool> {
-    return true;
+    return user.hasRole(Project(id), Admin);
   }
 }
