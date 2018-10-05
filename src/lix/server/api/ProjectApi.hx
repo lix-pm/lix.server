@@ -24,13 +24,17 @@ class ProjectApi extends BaseApi implements lix.api.ProjectApi {
           .all()
           .next(o -> {
             var project = o[0].Project;
-            {
+            var owner = o[0].Owner;
+            ({
+              id: project.id,
+              owner: owner.name,
               name: project.name,
+              url: project.url,
               description: project.description,
               tags: [for(o in o) if(o.ProjectTag != null) o.ProjectTag.tag],
               deprecated: project.deprecated,
               authors: [], // TODO
-            }
+            }:ProjectDescription);
           });
       case Failure(e):
         e;

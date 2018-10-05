@@ -1,6 +1,7 @@
 package lix.server.api;
 
 import lix.server.db.*;
+import lix.api.OwnerProjectsApi;
 
 class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
   var owner:OwnerName;
@@ -8,9 +9,10 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
   public function new(owner) {
     super();
     this.owner = owner;
+    this.cond = db.Owner.fields.name == owner;
   }
   
-  public function create(data:{name:String, ?url:String, ?description:String, ?tags:Array<String>}) {
+  public function create(data:NewProjectData) {
     return db.Owner.where(Owner.name == owner).first()
       .next(o -> {
         db.Project.insertOne({
@@ -22,6 +24,7 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
           deprecated: false,
         });
       })
+      // TODO handle authors
       .next((id:tink.sql.Types.Id<lix.server.db.Project>) -> {
         switch data.tags {
           case null | []: id;
@@ -38,27 +41,6 @@ class OwnerProjectsApi extends ProjectsApi implements lix.api.OwnerProjectsApi {
   
   public function byName(name:ProjectName):lix.api.ProjectApi
     return new ProjectApi(Slug('$owner/$name'));
-  
-  override function _list(?filter:ProjectFilter) {
-    return db.Project
-      .leftJoin(db.Owner).on(Project.owner == Owner.id)
-      .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
-      .where({
-        var cond = Owner.name == owner;
-        if(filter != null) {
-          if(filter.tags != null && filter.tags.length > 0) cond = cond && ProjectTag.tag.inArray(filter.tags);
-          if(filter.textSearch != null) cond = cond && Project.name.like('%${filter.textSearch}%');
-        }
-        cond;
-      })
-      .all()
-      .next(function(res):Array<{project:Project, projectTag:ProjectTag}> {
-        return [for(v in res) {
-          project: v.Project,
-          projectTag: v.ProjectTag
-        }];
-      });
-  }
   
   public function canCreate(user:AuthUser):Promise<Bool> {
     return user.hasRole(Owner(owner), Admin);

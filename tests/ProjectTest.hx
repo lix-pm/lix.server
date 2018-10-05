@@ -15,26 +15,30 @@ class ProjectTest extends BaseTest {
       ),
       async(
         () -> createProject(username, {name: name}),
-        project => asserts.assert(project.name == name)
+        project -> {
+          asserts.assert(project.id > 0);
+          asserts.assert(project.owner == username);
+          asserts.assert(project.name == name);
+        }
       ),
       async(
         () -> db.Project.where(Project.name == name).count(),
-        count => asserts.assert(count == 1)
+        count -> asserts.assert(count == 1)
       ),
       async(
         // list all projects
         () -> new OwnerProjectsApi(username).list(),
-        projects => asserts.assert(projects.length == 1)
+        projects -> asserts.assert(projects.length == 1)
       ),
       async(
         // filter with tag
         () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
-        projects => asserts.assert(projects.length == 0)
+        projects -> asserts.assert(projects.length == 0)
       ),
       async(
         // should not appear under another owner
         () -> new OwnerProjectsApi(username + 'another').list(),
-        projects => asserts.assert(projects.length == 0)
+        projects -> asserts.assert(projects.length == 0)
       ),
     ]).handle(asserts.handle);
     return asserts;
@@ -51,39 +55,39 @@ class ProjectTest extends BaseTest {
       ),
       async(
         () -> createProject(username, {name: name, tags: tags}), 
-        project => asserts.assert(compare(tags, project.tags))
+        project -> asserts.assert(compare(tags, project.tags))
       ),
       async(
         // check Project table
         () -> db.Project.where(Project.name == name).count(), 
-        count => asserts.assert(count == 1)
+        count -> asserts.assert(count == 1)
       ),
       async(
         // check ProjectTag table
         () -> db.Project
           .leftJoin(db.ProjectTag).on(Project.id == ProjectTag.project)
           .where(Project.name == name).count(), 
-        count => asserts.assert(count == 2)
+        count -> asserts.assert(count == 2)
       ),
       async(
         // list all projects
         () -> new OwnerProjectsApi(username).list(),
-        projects => asserts.assert(projects.length == 1)
+        projects -> asserts.assert(projects.length == 1)
       ),
       async(
         // filter with wrong tag
         () -> new OwnerProjectsApi(username).list({tags: ['dummy']}),
-        projects => asserts.assert(projects.length == 0)
+        projects -> asserts.assert(projects.length == 0)
       ),
       async(
         // filter with tag
         () -> new OwnerProjectsApi(username).list({tags: ['tag1']}),
-        projects => asserts.assert(projects.length == 1)
+        projects -> asserts.assert(projects.length == 1)
       ),
       async(
         // should not appear under another owner
         () -> new OwnerProjectsApi(username + 'another').list(),
-        projects => asserts.assert(projects.length == 0)
+        projects -> asserts.assert(projects.length == 0)
       ),
     ]).handle(asserts.handle);
     return asserts;
@@ -101,13 +105,13 @@ class ProjectTest extends BaseTest {
       asyncError(
         // 404 owner not found
         () -> createProject(owner, {name: name}), 
-        e => asserts.assert(e.code == 404)
+        e -> asserts.assert(e.code == 404)
       ),
     ]).handle(asserts.handle);
     return asserts;
   }
   
-  public static function createProject(owner:String, data = {name: 'project-name', url:(null:String), description:(null:String), tags:(null:Array<String>)}) {
+  public static function createProject(owner:String, data = {name: 'project-name', authors: (null:Array<String>),  url:(null:String), description:(null:String), tags:(null:Array<String>)}) {
     return new OwnerProjectsApi(owner).create(data);
   }
 }

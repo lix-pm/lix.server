@@ -7,6 +7,9 @@ interface UserApi {
   @:patch('/')
   @:consumes('application/json')
   function update(body:UserPatch):Promise<User>;
+  
+  @:sub
+  function owner():Promise<OwnerApi>;
 }
 
 typedef UserPatch = {

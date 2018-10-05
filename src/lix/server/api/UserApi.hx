@@ -60,6 +60,10 @@ class UserApi extends BaseApi implements lix.api.UserApi {
       ))
       .next(_ -> get());
   }
+  
+  public function owner():Promise<lix.api.OwnerApi> {
+    return get().next(user -> (new OwnerApi(user.username):lix.api.OwnerApi));
+  }
 }
 
 enum UserIdentifier {

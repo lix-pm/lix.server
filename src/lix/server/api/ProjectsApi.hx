@@ -5,25 +5,22 @@ import lix.server.db.*;
 import tink.sql.Expr;
 
 class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
+  
+  var cond:Condition = true;
+  
   public function list(?filter:ProjectFilter):Promise<Array<ProjectDescription>> {
-    return _list(filter)
-      .next(function(o):Array<ProjectDescription> {
-        var ret = new Map();
-        for(o in o) {
-          var project = o.project;
-          if(!ret.exists(project.id)) {
-            ret[project.id] = {
-              name: project.name,
-              description: project.description,
-              tags: [],
-              deprecated: project.deprecated,
-              authors: [], // TODO
-            }
-          }
-          if(o.projectTag != null)
-            ret[project.id].tags.push(o.projectTag.tag);
-        }
-        return [for(project in ret) project];
+    return this.filter(filter)
+      .next(function(rows):Array<ProjectDescription> {
+        return [for(row in rows) {
+          id: row.project.id,
+          owner: row.owner.name,
+          name: row.project.name,
+          description: row.project.description,
+          url: row.project.url,
+          tags: row.tags.map(tag -> tag.tag),
+          deprecated: row.project.deprecated,
+          authors: [], // TODO
+        }];
       });
   }
   
@@ -34,11 +31,12 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
     });
   }
   
-  function _list(?filter:ProjectFilter):Promise<Array<{project:Project, projectTag:ProjectTag}>> {
+  function filter(?filter:ProjectFilter) {
     return db.Project
+      .leftJoin(db.Owner).on(Owner.id == Project.owner)
       .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
       .where({
-        var cond:Condition = true;
+        var cond = this.cond;
         if(filter != null) {
           if(filter.tags != null && filter.tags.length > 0) cond = cond && ProjectTag.tag.inArray(filter.tags);
           if(filter.textSearch != null) cond = cond && Project.name.like('%${filter.textSearch}%');
@@ -46,11 +44,15 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
         cond;
       })
       .all()
-      .next(function(res):Array<{project:Project, projectTag:ProjectTag}> {
-        return [for(v in res) {
-          project: v.Project,
-          projectTag: v.ProjectTag
-        }];
-      });
+      .next(organize);
+  }
+  
+  function organize(rows:Array<{Owner:Owner, Project:Project, ProjectTag:ProjectTag}>):Array<{owner:Owner, project:Project, tags:Array<ProjectTag>}> {
+    var map = new Map();
+    for(row in rows) {
+      if(!map.exists(row.Project.id)) map[row.Project.id] = {owner: row.Owner, project: row.Project, tags: []}
+      if(row.ProjectTag != null) map[row.Project.id].tags.push(row.ProjectTag);
+    }
+    return [for(project in map) project];
   }
 }
