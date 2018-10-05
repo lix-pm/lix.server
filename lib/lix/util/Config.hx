@@ -51,6 +51,7 @@ class Config {
   public static var SITE_HOST = new Host(SITE_HOSTNAME, SITE_PORT);
   public static var SITE_URL = SITE_SCHEME + '://' + SITE_HOST;
   
+  public static inline var COGNITO_POOL_REGION = 'us-east-2';
   public static inline var COGNITO_POOL_ID = 'us-east-2_qNnxj1mU1';
   public static inline var COGNITO_CLIENT_ID = 'fvrf50i7h5od9nr1bq4pefcg3';
 }

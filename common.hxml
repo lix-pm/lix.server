@@ -12,3 +12,4 @@
 -lib why-fs
 -lib extern-js-aws-sdk
 -lib hxnodejs
+-lib jsonwebtoken
