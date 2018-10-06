@@ -1,6 +1,7 @@
 package;
 
 import haxe.io.Bytes;
+import why.fs.*;
 
 @:asserts
 class VersionTest extends BaseTest {
@@ -64,7 +65,7 @@ class VersionTest extends BaseTest {
       .next(v -> new VersionApi(Slug('$owner/$project'), version).upload())
       .next(o -> {
         var path = tink.Url.parse(o.url).query.toMap().get('path');
-        return new FilesApi().upload(path, archive);
+        return new FilesApi(@:privateAccess new BaseApi().fs).upload(path, archive);
       });
   }
 }

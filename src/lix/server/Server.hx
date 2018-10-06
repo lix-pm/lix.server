@@ -29,7 +29,7 @@ class Server {
   #end
   
   static function run(container:Container) {
-    var r = new Router<Session, LocalRoot>(new Root());
+    var r = new Router<Session, ServerRoot>(new Root());
     var handler:Handler = req -> r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
     handler = handler.applyMiddleware(new Log());
     container.run(handler).eager();

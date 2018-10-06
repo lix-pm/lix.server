@@ -1,7 +1,7 @@
 -D why-fs=0.0.0
-# @install: lix --silent download "gh://github.com/kevinresol/why-fs#70465d8fbe3722ddced2c4b08355574425f9144a" into why-fs/0.0.0/github/70465d8fbe3722ddced2c4b08355574425f9144a
+# @install: lix --silent download "gh://github.com/kevinresol/why-fs#d14959536b808fa9483b8a56c5e46bf374085b40" into why-fs/0.0.0/github/d14959536b808fa9483b8a56c5e46bf374085b40
 -lib tink_http
 -lib tink_io
 -lib futurize
 -lib mime
--cp ${HAXE_LIBCACHE}/why-fs/0.0.0/github/70465d8fbe3722ddced2c4b08355574425f9144a/src
+-cp ${HAXE_LIBCACHE}/why-fs/0.0.0/github/d14959536b808fa9483b8a56c5e46bf374085b40/src
