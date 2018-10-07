@@ -5,6 +5,4 @@ typedef ProjectFilter = {
   @:optional var textSearch:String;
   @:optional var includeDeprecated:Bool;
   @:optional var modifiedSince:Date;
-  @:optional var limit:Int;
-  @:optional var offset:Int;
 }

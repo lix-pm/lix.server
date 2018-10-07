@@ -8,8 +8,8 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
   
   var cond:Condition = true;
   
-  public function list(?filter:ProjectFilter):Promise<Array<ProjectDescription>> {
-    return this.filter(filter)
+  public function list(?filter:ProjectFilter, ?limit:Limit):Promise<Array<ProjectDescription>> {
+    return this.filter(filter, limit)
       .next(function(rows):Array<ProjectDescription> {
         return [for(row in rows) {
           id: row.project.id,
@@ -31,7 +31,7 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
     });
   }
   
-  function filter(?filter:ProjectFilter) {
+  function filter(filter:ProjectFilter, limit:Limit) {
     return db.Project
       .leftJoin(db.Owner).on(Owner.id == Project.owner)
       .leftJoin(db.ProjectTag).on(ProjectTag.project == Project.id)
@@ -43,6 +43,7 @@ class ProjectsApi extends BaseApi implements lix.api.ProjectsApi {
         }
         cond;
       })
+      .limit(limit)
       .all()
       .next(organize);
   }
