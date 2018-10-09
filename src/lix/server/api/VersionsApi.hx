@@ -12,21 +12,22 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
     var now = Date.now();
     return getProjectId(id)
       .next(id -> {
-        Promise.inParallel([
-          db.ProjectVersion.insertOne({
-            project: id,
-            version: data.version,
-            haxe: data.haxe,
-            published: now,
-            deprecated: null,
-          }).noise(),
-          db.ProjectVersionDependency.insertMany([for(dep in data.dependencies) {
-            project: id,
-            version: data.version,
-            name: dep.name,
-            constraint: dep.constraint,
-          }]).noise(),
-        ]);
+        db.ProjectVersion.insertOne({
+          project: id,
+          version: data.version,
+          haxe: data.haxe,
+          published: now,
+          deprecated: null,
+        }).swap(id);
+      })
+      .mapError(e -> e.message.indexOf('ER_DUP_ENTRY') == -1 ? e : new Error(Conflict, 'Version ${data.version} already exists'))
+      .next(id -> {
+        db.ProjectVersionDependency.insertMany([for(dep in data.dependencies) {
+          project: id,
+          version: data.version,
+          name: dep.name,
+          constraint: dep.constraint,
+        }]);
       })
       .next(_ -> ({
         version: data.version,

@@ -23,7 +23,8 @@ class VersionTest extends BaseTest {
         () -> remote(userId).me().owner().projects().create({name: project})
       ),
       async(
-        () -> remote(userId).createVersion(username, project, version)
+        () -> remote(userId).createVersion(username, project, version),
+        v -> v.version == version
       ),
       async(
         // make sure the file exists in fs
@@ -40,6 +41,31 @@ class VersionTest extends BaseTest {
           asserts.assert(versions.length == 1);
           asserts.assert(versions[0].version == version);
         }
+      ),
+    ]).handle(asserts.handle);
+    return asserts;
+  }
+  
+  public function duplicated() {
+    var username = 'my_username';
+    var userId;
+    var project = 'my_project';
+    var version = new Version(1, 0, 0);
+    
+    Promise.inSequence([
+      async(
+        () -> Helper.createUser({username: username}),
+        user -> userId = user.id
+      ),
+      async(
+        () -> remote(userId).me().owner().projects().create({name: project})
+      ),
+      async(
+        () -> remote(userId).createVersion(username, project, version)
+      ),
+      asyncError(
+        () -> remote(userId).createVersion(username, project, version),
+        e -> asserts.assert(e.code == 409)
       ),
     ]).handle(asserts.handle);
     return asserts;

@@ -20,10 +20,13 @@ class Helper {
         dependencies: [],
         haxe: null,
       })
-      .next(v -> remote.owners().byName(owner).projects().byName(project).versions().byVersion(version).upload())
-      .next(o -> {
-        var path = tink.Url.parse(o.url).query.toMap().get('path');
-        return new FilesApi(Boot.fs).upload(path, archive);
+      .next(v -> {
+        remote.owners().byName(owner).projects().byName(project).versions().byVersion(version).upload()
+          .next(o -> {
+            var path = tink.Url.parse(o.url).query.toMap().get('path');
+            return new FilesApi(Boot.fs).upload(path, archive);
+          })
+          .swap(v);
       });
   }
 }
