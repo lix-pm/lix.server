@@ -35,7 +35,8 @@ class UserApi extends BaseApi implements lix.api.UserApi {
                 {where: o -> o.name == user.username}
               ).noise();
             }
-          });
+          })
+          .mapError(e -> e.message.indexOf('ER_DUP_ENTRY') == -1 ? e : new Error(Conflict, 'Username already taken'));
       case None:
         Promise.NOISE;
     })

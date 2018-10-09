@@ -44,9 +44,9 @@ class BaseTest {
       });
   }
   
-  function asyncError<T>(promise:Void->Promise<T>, ?assert:Error->Void) {
+  function asyncError<T>(promise:Void->Promise<T>, ?assert:Error->Void, ?pos:haxe.PosInfos) {
     return Promise.lazy(promise).map(o -> switch o {
-        case Success(_): Failure(new Error('Expected Failure but got Success'));
+        case Success(_): Failure(new Error('Expected Failure but got Success', pos));
         case Failure(e): assert(e); Success(Noise);
       });
   }

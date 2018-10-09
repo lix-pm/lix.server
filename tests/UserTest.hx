@@ -10,7 +10,6 @@ class UserTest extends BaseTest {
     
     Promise.inSequence([
       async(
-        // check API response
         () -> Helper.createUser({username: username}),
         user -> userId = user.id
       ),
@@ -28,6 +27,28 @@ class UserTest extends BaseTest {
         // check remote 
         () -> remote(userId).me().get(),
         user -> asserts.assert(user.id == userId)
+      ),
+    ]).handle(asserts.handle);
+    return asserts;
+  }
+  
+  public function duplicatedUsername() {
+    var username = 'my_username';
+    var userId:Int;
+    
+    Promise.inSequence([
+      async(
+        () -> Helper.createUser({username: username}),
+        user -> userId = user.id
+      ),
+      asyncError(
+        () -> Helper.createUser({username: username}),
+        e -> asserts.assert(e.code == 409)
+      ),
+      async(
+        // check User table
+        () -> db.User.where(User.username == username).count(),
+        count -> asserts.assert(count == 1)
       ),
     ]).handle(asserts.handle);
     return asserts;
