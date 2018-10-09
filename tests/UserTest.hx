@@ -11,7 +11,7 @@ class UserTest extends BaseTest {
     Promise.inSequence([
       async(
         // check API response
-        () -> createUser({username: username}),
+        () -> Helper.createUser({username: username}),
         user -> userId = user.id
       ),
       async(
@@ -31,10 +31,5 @@ class UserTest extends BaseTest {
       ),
     ]).handle(asserts.handle);
     return asserts;
-  }
-  
-  public static function createUser(data, cognitoId = 'dummy_cognito_id') {
-    return Db.get().User.insertOne({id: null, cognitoId: cognitoId})
-      .next(id -> new UserApi(Id(id)).update({username: Some(data.username), nickname: None}));
   }
 }

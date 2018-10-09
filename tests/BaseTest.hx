@@ -12,33 +12,27 @@ import tink.http.Handler;
 import tink.http.Client;
 import tink.http.middleware.*;
 import tink.web.routing.*;
-import tink.web.proxy.Remote;
+import tink.web.proxy.Remote.RemoteEndpoint;
 import tink.url.Host;
 
 class BaseTest {
-  var db = Db.get();
-  var client:Client;
+  var db = Boot.db;
+  var fs = Boot.fs;
+  var client = Boot.client;
   
-  public function new() {
-    var router = new Router<Session, lix.api.Root>(new Root());
-    var container = new LocalContainer();
-    client = new LocalContainerClient(container);
-    var handler:Handler = req -> router.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
-    // handler = handler.applyMiddleware(new Log());
-    container.run(handler).eager();
-  }
+  public function new() {}
   
   @:before
   public function init() {
     return Promise.inParallel([
-      @:privateAccess new BaseApi().fs.delete('/').recover(_ -> Noise),
+      fs.delete('/').recover(_ -> Noise),
       db.destroy().flatMap(_ -> db.init()),
     ]);
   }
   
-  function remote(id:Int) {
-    return new Remote<lix.api.Root>(
-      new TestClient(client, id),
+  function remote(?id:Int) {
+    return new tink.web.proxy.Remote<lix.api.Root>(
+      id == null ? client : new TestClient(client, id),
       new RemoteEndpoint(new Host('localhost', 1))
     );
   }
@@ -56,6 +50,10 @@ class BaseTest {
         case Failure(e): assert(e); Success(Noise);
       });
   }
+  
+  inline function path(id, ver)
+    return Boot.path(id, ver);
+  
 }
 
 class TestClient implements ClientObject {

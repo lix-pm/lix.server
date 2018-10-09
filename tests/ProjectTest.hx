@@ -8,13 +8,15 @@ class ProjectTest extends BaseTest {
   public function createWithoutTags() {
     var username = 'my_username';
     var name = 'project-name';
+    var userId;
     
     Promise.inSequence([
       async(
-        () -> UserTest.createUser({username: username})
+        () -> Helper.createUser({username: username}),
+        user -> userId = user.id
       ),
       async(
-        () -> createProject(username, {name: name}),
+        () -> remote(userId).me().owner().projects().create({name: name}),
         project -> {
           asserts.assert(project.id > 0);
           asserts.assert(project.owner == username);
@@ -48,13 +50,15 @@ class ProjectTest extends BaseTest {
     var username = 'my_username';
     var name = 'project-name';
     var tags = ['tag1', 'tag2'];
+    var userId;
     
     Promise.inSequence([
       async(
-        () -> UserTest.createUser({username: username})
+        () -> Helper.createUser({username: username}),
+        user -> userId = user.id
       ),
       async(
-        () -> createProject(username, {name: name, tags: tags}), 
+        () -> remote(userId).me().owner().projects().create({name: name, tags: tags}), 
         project -> asserts.assert(compare(tags, project.tags))
       ),
       async(
@@ -97,21 +101,44 @@ class ProjectTest extends BaseTest {
     var username = 'my_username';
     var name = 'project-name';
     var owner = 'whatever';
+    var userId;
     
     Promise.inSequence([
       async(
-        () -> UserTest.createUser({username: username})
+        () -> Helper.createUser({username: username}),
+        user -> userId = user.id
       ),
       asyncError(
-        // 404 owner not found
-        () -> createProject(owner, {name: name}), 
-        e -> asserts.assert(e.code == 404)
+        // 403 forbidden 
+        // TODO: should it be 404?
+        () -> remote(userId).owners().byName(owner).projects().create({name: name}), 
+        e -> asserts.assert(e.code == 403)
       ),
     ]).handle(asserts.handle);
     return asserts;
   }
   
-  public static function createProject(owner:String, data = {name: 'project-name', authors: (null:Array<String>),  url:(null:String), description:(null:String), tags:(null:Array<String>)}) {
-    return new OwnerProjectsApi(owner).create(data);
+  public function createAsAnotherOwner() {
+    var username1 = 'my_username1';
+    var username2 = 'my_username2';
+    var name = 'project-name';
+    var userId1, userId2;
+    
+    Promise.inSequence([
+      async(
+        () -> Helper.createUser({username: username1}),
+        user -> userId1 = user.id
+      ),
+      async(
+        () -> Helper.createUser({username: username2}),
+        user -> userId2 = user.id
+      ),
+      asyncError(
+        // 403 forbidden
+        () -> remote(userId1).owners().byName(username2).projects().create({name: name}), 
+        e -> asserts.assert(e.code == 403)
+      ),
+    ]).handle(asserts.handle);
+    return asserts;
   }
 }
