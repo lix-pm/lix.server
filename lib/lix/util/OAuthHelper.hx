@@ -11,7 +11,7 @@ class OAuthHelper {
   static var COGNITO_CLIENT_SECRET = Sys.getEnv('COGNITO_CLIENT_SECRET');
   
   public static function authorize(?state:String, type:ResponseType, redirect:String):tink.Url {
-    return 'https://lix.auth.us-east-2.amazoncognito.com/oauth2/authorize?' + 
+    return 'https://login.lix.pm/oauth2/authorize?' + 
       tink.QueryString.build({
         response_type: type,
         client_id: COGNITO_CLIENT_ID,
@@ -21,7 +21,7 @@ class OAuthHelper {
   }
   
   public static function callback(code:String, redirect:String, ?state:String):Promise<TokenResponse> {
-    return fetch('https://lix.auth.us-east-2.amazoncognito.com/oauth2/token', {
+    return fetch('https://login.lix.pm/oauth2/token', {
       method: POST,
       headers: [
         new HeaderField(AUTHORIZATION, HeaderValue.basicAuth(COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET)),
@@ -39,7 +39,7 @@ class OAuthHelper {
   }
   
   public static function getUserInfo(accessToken:String) {
-    return fetch('https://lix.auth.us-east-2.amazoncognito.com/oauth2/userInfo', { 
+    return fetch('https://login.lix.pm/oauth2/userInfo', { 
         headers: [new HeaderField(AUTHORIZATION, 'Bearer $accessToken')],
     }).all().next(res -> tink.Json.parse((res.body:UserInfo)));
   }
