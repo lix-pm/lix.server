@@ -9,6 +9,9 @@ interface VersionsApi {
   @:get('/')
   function list():Promise<Array<ProjectVersion>>;
   
+  @:sub
+  function latest():Promise<VersionApi>;
+  
   @:sub('/$version')
   function byVersion(version:Version):VersionApi;
   

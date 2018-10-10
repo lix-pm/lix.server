@@ -78,6 +78,15 @@ class VersionsApi extends BaseApi implements lix.api.VersionsApi {
         ([for(v in ret) v]:Array<ProjectVersion>);
       });
   }
+  
+  public function latest() {
+    return getProjectId(id)
+      .next(pid -> db.ProjectVersion.where(ProjectVersion.project == pid).all())
+      .next(versions -> {
+        versions.sort((v1, v2) -> v1.version > v2.version ? -1 : 1);
+        (new VersionApi(id, versions[0].version):lix.api.VersionApi);
+      });
+  }
     
   public function byVersion(version:Version):VersionApi
     return new VersionApi(id, version);

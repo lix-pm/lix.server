@@ -14,6 +14,35 @@ class VersionApi extends BaseApi implements lix.api.VersionApi {
     this.version = version;
   }
   
+  public function get():Promise<ProjectVersion> {
+    return getProjectId(id)
+      .next(pid -> db.ProjectVersion
+        .leftJoin(db.ProjectVersionDependency).on(ProjectVersion.project == ProjectVersionDependency.project && ProjectVersion.version == ProjectVersionDependency.version)
+        .where(ProjectVersion.project == pid && ProjectVersion.version == version)
+        .all()
+      )
+      .next(rows -> {
+        var version = rows[0].ProjectVersion;
+        var ret:ProjectVersion = {  
+          version: version.version,
+          dependencies: [],
+          haxe: version.haxe,
+          published: version.published,
+          deprecated: version.deprecated,
+        }
+        for(row in rows)
+          switch row.ProjectVersionDependency {
+            case null:
+            case dep:
+              ret.dependencies.push({
+                name: dep.name,
+                constraint: dep.constraint,
+              });
+          }
+        ret;
+      });
+  }
+  
   public function download():Promise<UrlRequest> {
     return getArchivePath()
       .next(path -> {

@@ -3,6 +3,9 @@ package lix.api;
 import why.Fs;
 
 interface VersionApi {
+  @:get('/')
+  function get():Promise<ProjectVersion>;
+  
   @:get('/archive')
   function download():Promise<UrlRequest>;
   
