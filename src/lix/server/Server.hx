@@ -11,6 +11,7 @@ import tink.http.Container;
 import tink.http.Handler;
 import tink.http.containers.*;
 import tink.http.middleware.*;
+import tink.http.middleware.CrossOriginResourceSharing;
 import tink.web.routing.Router;
 import tink.web.routing.Context;
 
@@ -32,6 +33,7 @@ class Server {
     var r = new Router<Session, ServerRoot>(new Root());
     var handler:Handler = req -> r.route(Context.authed(req, Session.new)).recover(OutgoingResponse.reportError);
     handler = handler.applyMiddleware(new Log());
+    handler = handler.applyMiddleware(new CrossOriginResourceSharing(CorsProcessor.regex(#if (environment == "local") ~/.*/ #else ~/^https:\/\/[\w-]*\.lix.pm$/ #end, true)));
     container.run(handler).eager();
     
     // init / update db (TODO: this shouldn't be here)
