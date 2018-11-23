@@ -19,10 +19,12 @@ class BaseApi {
         root: './storage',
         getDownloadUrl: (path, _) -> {
           url: '$API_SERVER_URL/files?path=$path',
+          headers: [],
           method: GET,
         },
         getUploadUrl: (path, _) -> {
           url: '$API_SERVER_URL/files?path=$path',
+          headers: [],
           method: PUT,
         },
       })

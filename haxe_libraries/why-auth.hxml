@@ -1,0 +1,5 @@
+-D why-auth=0.0.0
+# @install: lix --silent download "gh://github.com/why-haxe/why-auth#d8b8a2efdd2e61401ffca6f3ad5371c7df3486c5" into why-auth/0.0.0/github/d8b8a2efdd2e61401ffca6f3ad5371c7df3486c5
+-lib jsonwebtoken
+-lib tink_web
+-cp ${HAXE_LIBCACHE}/why-auth/0.0.0/github/d8b8a2efdd2e61401ffca6f3ad5371c7df3486c5/src

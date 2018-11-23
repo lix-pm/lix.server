@@ -9,6 +9,7 @@
 -lib tink_lang
 -lib tink_semver
 -lib tink_core_ext
+-lib why-auth
 -lib why-fs
 -lib extern-js-aws-sdk
 -lib hxnodejs
